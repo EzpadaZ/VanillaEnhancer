@@ -1,4 +1,6 @@
 debug: true
-log: true
-multiplier: 2
-death-cooldown: 3
+
+double-xp:
+  log: true
+  multiplier: 2
+  death-cooldown: 3
