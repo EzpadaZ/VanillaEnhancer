@@ -2,6 +2,7 @@ package dev.ezpadaz.vanillaenhancer;
 
 import dev.ezpadaz.vanillaenhancer.Commands.CommandBootloader;
 import dev.ezpadaz.vanillaenhancer.Listeners.ListenerBootloader;
+import dev.ezpadaz.vanillaenhancer.Utils.DependencyHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,6 +27,8 @@ public final class VanillaEnhancer extends JavaPlugin {
 
         // Listeners
         new ListenerBootloader();
+
+        DependencyHelper.checkDependencies();
 
         MessageHelper.console("&6Plugin status: &aEnabled");
     }

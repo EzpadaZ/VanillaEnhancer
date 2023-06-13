@@ -1,5 +1,6 @@
 package dev.ezpadaz.vanillaenhancer.Listeners;
 
+import dev.ezpadaz.vanillaenhancer.Listeners.Events.DoubleXPEvent;
 import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
 import org.bukkit.Bukkit;
 

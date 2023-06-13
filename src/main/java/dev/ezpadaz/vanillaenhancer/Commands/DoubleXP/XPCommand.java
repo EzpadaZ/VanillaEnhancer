@@ -1,7 +1,7 @@
 package dev.ezpadaz.vanillaenhancer.Commands.DoubleXP;
 
 import dev.ezpadaz.vanillaenhancer.Commands.BaseCommand;
-import dev.ezpadaz.vanillaenhancer.Listeners.DoubleXPEvent;
+import dev.ezpadaz.vanillaenhancer.Listeners.Events.DoubleXPEvent;
 import dev.ezpadaz.vanillaenhancer.Utils.ExperienceHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
 import org.bukkit.command.CommandSender;

@@ -2,3 +2,5 @@ name: VanillaEnhancer
 version: '${version}'
 main: dev.ezpadaz.vanillaenhancer.VanillaEnhancer
 api-version: "1.20"
+
+softdepend: [ReviveMe]

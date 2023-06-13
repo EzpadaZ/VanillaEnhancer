@@ -1,4 +1,4 @@
-package dev.ezpadaz.vanillaenhancer.Listeners;
+package dev.ezpadaz.vanillaenhancer.Listeners.Events;
 
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
 import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
