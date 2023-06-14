@@ -1,5 +1,10 @@
 debug: true
 
+config:
+  revive-cost: 32
+  tp-cost: 8
+  tp-cooldown: 60
+
 double-xp:
   log: true
   multiplier: 2
