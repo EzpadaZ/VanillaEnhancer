@@ -3,10 +3,7 @@ package dev.ezpadaz.vanillaenhancer.Commands;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
 import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandMap;
-import org.bukkit.command.CommandSender;
+import org.bukkit.command.*;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.SimplePluginManager;
@@ -15,7 +12,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseCommand extends BukkitCommand implements CommandExecutor {
+public abstract class BaseCommand extends BukkitCommand implements CommandExecutor, TabExecutor {
 
     private List<String> delayedPlayers = null;
     private int delay = 0;

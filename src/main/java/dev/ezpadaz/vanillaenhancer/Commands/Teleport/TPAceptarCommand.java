@@ -7,13 +7,21 @@ import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
 import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
+import java.util.List;
+
 public class TPAceptarCommand {
     public TPAceptarCommand() {
         new BaseCommand("aceptar", 0, true) {
+            @Override
+            public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+                return null;
+            }
+
             int MATERIAL_COST = 32;
             int TELEPORT_DELAY = 1;
             Material MATERIAL_TYPE = Material.GOLD_INGOT;

@@ -23,6 +23,7 @@ jar {
 
 dependencies {
     compileOnly "org.spigotmc:spigot-api:1.20-R0.1-SNAPSHOT"
+    implementation 'com.elmakers.mine.bukkit:EffectLib:9.4'
     implementation files("libs/ReviveMe-API.jar")
 }
 

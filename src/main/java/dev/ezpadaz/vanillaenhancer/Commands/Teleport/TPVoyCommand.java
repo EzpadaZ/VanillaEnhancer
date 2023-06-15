@@ -4,8 +4,11 @@ import dev.ezpadaz.vanillaenhancer.Commands.BaseCommand;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class TPVoyCommand {
     public TPVoyCommand() {
@@ -13,6 +16,11 @@ public class TPVoyCommand {
         Material MATERIAL_TYPE = Material.GOLD_INGOT;
         String MATERIAL_NAME = "Lingotes de oro";
         new BaseCommand("voy", 1, false) {
+            @Override
+            public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+                return null;
+            }
+
             @Override
             public boolean onCommand(CommandSender sender, String[] arguments) {
 

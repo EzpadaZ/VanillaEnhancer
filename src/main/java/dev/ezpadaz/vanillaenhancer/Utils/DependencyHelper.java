@@ -19,7 +19,6 @@ public class DependencyHelper {
             hasPlaceholderApi = true;
             MessageHelper.console("PlaceholderAPI detected, enabled support for it.");
         }
-
     }
 
 }
