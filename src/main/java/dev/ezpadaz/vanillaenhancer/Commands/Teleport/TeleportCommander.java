@@ -42,6 +42,7 @@ public class TeleportCommander {
         }, 20L * REQUEST_TIMEOUT);
     }
 
+
     public boolean isSafe(Location location) {
         int x = location.getBlockX();
         int y = location.getBlockY();
@@ -62,7 +63,16 @@ public class TeleportCommander {
     }
 
     public void removePlayerRequest(String destino) {
-        teleportQueue.remove(destino);
+        Player jugador = Bukkit.getServer().getPlayer(destino);
+
+        if (jugador != null && teleportQueue.containsKey(destino)) {
+            MessageHelper.send(jugador, "&6He cancelado las solicitudes pendientes que tenias :-)");
+            teleportQueue.remove(destino);
+        } else {
+            MessageHelper.send(jugador, "&cNo tenias solicitudes pendientes.");
+        }
+
+
     }
 
     public TeleportDAO getPlayerRequest(String destino) {
