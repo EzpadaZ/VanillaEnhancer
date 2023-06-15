@@ -52,12 +52,19 @@ public class AceptarCommand {
                     if (commander.isSafe(location) && !target.isFlying() && !target.isGliding()) {
                         // player is safe to go to, is not flying nor gliding (some mofos, man).
                         origen.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    } else {
+                        MessageHelper.send(origen, "&cHe cancelado el viaje ya que no es seguro.");
+                        return true;
                     }
                 } else {
                     Location location = origen.getLocation();
                     if (commander.isSafe(location) && !origen.isFlying() && !origen.isGliding()) {
                         // player is safe to go to, is not flying nor gliding (some mofos, man).
                         target.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                    } else {
+                        // not safe, tell the player.
+                        MessageHelper.send(target, "&cHe cancelado el viaje ya que no es seguro.");
+                        return true;
                     }
                 }
 
