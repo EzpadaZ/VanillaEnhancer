@@ -7,15 +7,15 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class VoyCommand {
-    public VoyCommand() {
+public class TPVenCommand {
+    public TPVenCommand() {
         int MATERIAL_COST = 32;
         Material MATERIAL_TYPE = Material.GOLD_INGOT;
         String MATERIAL_NAME = "Lingotes de oro";
-        new BaseCommand("voy", 1, false) {
+
+        new BaseCommand("ven", 1, true) {
             @Override
             public boolean onCommand(CommandSender sender, String[] arguments) {
-
                 Player target = Bukkit.getPlayer(arguments[0]);
                 Player origen = Bukkit.getPlayer(sender.getName());
 
@@ -40,9 +40,9 @@ public class VoyCommand {
                 }
 
                 TeleportCommander commander = TeleportCommander.getInstance();
-                commander.addPlayerRequest(target.getName(), new TeleportDAO(origen.getName(), target.getName(), true));
+                commander.addPlayerRequest(target.getName(), new TeleportDAO(origen.getName(), target.getName(), false));
 
-                String peticionText = "&c%s &6quiere ir hacia tu ubicacion, escribe &a/aceptar&6 en los siguientes &c%s segundos &6para autorizar esta peticion.".formatted(sender.getName(), commander.REQUEST_TIMEOUT);
+                String peticionText = "&c%s &6quiere que vayas hacia su ubicacion, escribe &a/aceptar&6 en los siguientes &c%s segundos &6para autorizar esta peticion.".formatted(sender.getName(), commander.REQUEST_TIMEOUT);
                 MessageHelper.send(target, peticionText);
                 MessageHelper.send(origen, "&6Solicitud enviada!\n\nEsto tendra un costo de: &c%s &3%s &6cuando &c%s &6acepte el proceso.".formatted(MATERIAL_COST, MATERIAL_NAME, target.getName()));
                 return true;
@@ -50,7 +50,7 @@ public class VoyCommand {
 
             @Override
             public String getUsage() {
-                return "/voy {nombre} [Te lleva a ti padrino al sujeto que especifiques.]";
+                return "/ven {nombre}   [Lleva al jugador especificado a tu ubicacion]";
             }
         };
     }

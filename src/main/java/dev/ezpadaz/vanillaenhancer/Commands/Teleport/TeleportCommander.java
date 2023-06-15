@@ -1,5 +1,6 @@
 package dev.ezpadaz.vanillaenhancer.Commands.Teleport;
 
+import dev.ezpadaz.vanillaenhancer.Utils.GeneralUtils;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
 import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
 import org.bukkit.Bukkit;
@@ -10,9 +11,8 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 
 public class TeleportCommander {
-    public static TeleportCommander instance;
+    private static TeleportCommander instance;
     public HashMap<String, TeleportDAO> teleportQueue;
-
 
     public int REQUEST_TIMEOUT = 60;
 
@@ -25,21 +25,28 @@ public class TeleportCommander {
         return instance;
     }
 
+    // Creates the command instances.
+    public void setupCommander() {
+        new TPVoyCommand();
+        new TPRechazarCommand();
+        new TPAceptarCommand();
+        new TPVenCommand();
+    }
+
     public void addPlayerRequest(String destino, TeleportDAO data) {
         teleportQueue.remove(destino);
 
         teleportQueue.put(destino, data);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(VanillaEnhancer.getInstance(), () -> {
-
+        GeneralUtils.scheduleTask(() -> {
             Player target = Bukkit.getPlayer(destino);
 
             if (target != null && teleportQueue.containsKey(destino)) {
-                MessageHelper.send(target, "&cLa peticion que te habian enviado ha caducado.");
+                MessageHelper.send(target, "&cLa petición que te habían enviado ha caducado.");
             }
 
             teleportQueue.remove(destino);
+        }, REQUEST_TIMEOUT);
 
-        }, 20L * REQUEST_TIMEOUT);
     }
 
 
@@ -71,8 +78,6 @@ public class TeleportCommander {
         } else {
             MessageHelper.send(jugador, "&cNo tenias solicitudes pendientes.");
         }
-
-
     }
 
     public TeleportDAO getPlayerRequest(String destino) {

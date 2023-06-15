@@ -1,6 +1,7 @@
 package dev.ezpadaz.vanillaenhancer.Commands.Teleport;
 
 import dev.ezpadaz.vanillaenhancer.Commands.BaseCommand;
+import dev.ezpadaz.vanillaenhancer.Utils.GeneralUtils;
 import dev.ezpadaz.vanillaenhancer.Utils.InventoryHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
 import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
@@ -10,12 +11,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-public class AceptarCommand {
-    public AceptarCommand() {
+public class TPAceptarCommand {
+    public TPAceptarCommand() {
         new BaseCommand("aceptar", 0, true) {
             int MATERIAL_COST = 32;
+            int TELEPORT_DELAY = 1;
             Material MATERIAL_TYPE = Material.GOLD_INGOT;
-            String MATERIAL_NAME = "Lingotes de oro";
 
             @Override
             public boolean onCommand(CommandSender sender, String[] arguments) {
@@ -51,7 +52,9 @@ public class AceptarCommand {
                     Location location = target.getLocation();
                     if (commander.isSafe(location) && !target.isFlying() && !target.isGliding()) {
                         // player is safe to go to, is not flying nor gliding (some mofos, man).
-                        origen.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                        GeneralUtils.scheduleTask(() -> {
+                            origen.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                        }, TELEPORT_DELAY);
                     } else {
                         MessageHelper.send(origen, "&cHe cancelado el viaje ya que no es seguro.");
                         return true;
@@ -60,7 +63,9 @@ public class AceptarCommand {
                     Location location = origen.getLocation();
                     if (commander.isSafe(location) && !origen.isFlying() && !origen.isGliding()) {
                         // player is safe to go to, is not flying nor gliding (some mofos, man).
-                        target.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                        GeneralUtils.scheduleTask(() -> {
+                            target.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                        }, TELEPORT_DELAY);
                     } else {
                         // not safe, tell the player.
                         MessageHelper.send(target, "&cHe cancelado el viaje ya que no es seguro.");

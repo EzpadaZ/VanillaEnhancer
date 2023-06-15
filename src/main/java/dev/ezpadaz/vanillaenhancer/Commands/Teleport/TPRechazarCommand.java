@@ -3,8 +3,8 @@ package dev.ezpadaz.vanillaenhancer.Commands.Teleport;
 import dev.ezpadaz.vanillaenhancer.Commands.BaseCommand;
 import org.bukkit.command.CommandSender;
 
-public class RechazarCommand {
-    public RechazarCommand() {
+public class TPRechazarCommand {
+    public TPRechazarCommand() {
         new BaseCommand("rechazar", 0, true) {
             @Override
             public boolean onCommand(CommandSender sender, String[] arguments) {
