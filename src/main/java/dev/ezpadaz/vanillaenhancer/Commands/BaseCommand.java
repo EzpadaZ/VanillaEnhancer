@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseCommand extends BukkitCommand implements CommandExecutor, TabExecutor {
+public abstract class BaseCommand extends BukkitCommand implements TabExecutor {
 
     private List<String> delayedPlayers = null;
     private int delay = 0;

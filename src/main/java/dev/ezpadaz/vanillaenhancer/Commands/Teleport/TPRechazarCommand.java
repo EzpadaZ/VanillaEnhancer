@@ -9,6 +9,7 @@ import java.util.List;
 public class TPRechazarCommand {
     public TPRechazarCommand() {
         new BaseCommand("rechazar", 0, true) {
+
             @Override
             public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
                 return null;
@@ -17,7 +18,7 @@ public class TPRechazarCommand {
             @Override
             public boolean onCommand(CommandSender sender, String[] arguments) {
                 TeleportCommander commander = TeleportCommander.getInstance();
-                commander.removePlayerRequest(sender.getName());
+                commander.removePlayerRequest(sender.getName(), false);
                 return true;
             }
 

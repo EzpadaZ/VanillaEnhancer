@@ -4,16 +4,23 @@ import dev.ezpadaz.vanillaenhancer.Commands.BaseCommand;
 import dev.ezpadaz.vanillaenhancer.Listeners.Events.DoubleXPEvent;
 import dev.ezpadaz.vanillaenhancer.Utils.ExperienceHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class XPCommand {
     public XPCommand() {
         new BaseCommand("dxp", 1, false) {
+
+            @Override
+            public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+                return null;
+            }
 
             @Override
             public boolean onCommand(CommandSender sender, String[] arguments) {

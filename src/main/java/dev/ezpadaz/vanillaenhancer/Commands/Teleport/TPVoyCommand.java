@@ -12,9 +12,6 @@ import java.util.List;
 
 public class TPVoyCommand {
     public TPVoyCommand() {
-        int MATERIAL_COST = 32;
-        Material MATERIAL_TYPE = Material.GOLD_INGOT;
-        String MATERIAL_NAME = "Lingotes de oro";
         new BaseCommand("voy", 1, false) {
             @Override
             public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
@@ -42,8 +39,8 @@ public class TPVoyCommand {
                     return true;
                 }
 
-                if (!origen.getInventory().contains(MATERIAL_TYPE, MATERIAL_COST)) {
-                    MessageHelper.send(origen, "&6No tienes &c%s &3%s &6para realizar el viaje :-(".formatted(MATERIAL_COST, MATERIAL_NAME));
+                if (!origen.getInventory().contains(TeleportCommander.getInstance().MATERIAL_TYPE, TeleportCommander.getInstance().MATERIAL_COST)) {
+                    MessageHelper.send(origen, "&6No tienes &c%s &3%s &6para realizar el viaje :-(".formatted(TeleportCommander.getInstance().MATERIAL_COST, TeleportCommander.getInstance().MATERIAL_NAME));
                     return true;
                 }
 
@@ -52,7 +49,7 @@ public class TPVoyCommand {
 
                 String peticionText = "&c%s &6quiere ir hacia tu ubicacion, escribe &a/aceptar&6 en los siguientes &c%s segundos &6para autorizar esta peticion.".formatted(sender.getName(), commander.REQUEST_TIMEOUT);
                 MessageHelper.send(target, peticionText);
-                MessageHelper.send(origen, "&6Solicitud enviada!\n\nEsto tendra un costo de: &c%s &3%s &6cuando &c%s &6acepte el proceso.".formatted(MATERIAL_COST, MATERIAL_NAME, target.getName()));
+                MessageHelper.send(origen, "&6Solicitud enviada!\n\nEsto tendra un costo de: &c%s &3%s &6cuando &c%s &6acepte el proceso.".formatted(TeleportCommander.getInstance().MATERIAL_COST, TeleportCommander.getInstance().MATERIAL_NAME, target.getName()));
                 return true;
             }
 

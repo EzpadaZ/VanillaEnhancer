@@ -22,9 +22,7 @@ public class TPAceptarCommand {
                 return null;
             }
 
-            int MATERIAL_COST = 32;
-            int TELEPORT_DELAY = 1;
-            Material MATERIAL_TYPE = Material.GOLD_INGOT;
+            final int TELEPORT_DELAY = 1;
 
             @Override
             public boolean onCommand(CommandSender sender, String[] arguments) {
@@ -50,7 +48,7 @@ public class TPAceptarCommand {
                     return true;
                 }
 
-                if (!origen.getInventory().contains(MATERIAL_TYPE, MATERIAL_COST)) {
+                if (!origen.getInventory().contains(TeleportCommander.getInstance().MATERIAL_TYPE, TeleportCommander.getInstance().MATERIAL_COST)) {
                     MessageHelper.send(sender, "&cHe cancelado el proceso ya que no se pudo cobrar el precio de viaje.");
                     MessageHelper.send(origen, "&c%s &6no me robes perro!".formatted(origen.getName()));
                     return true;
@@ -84,11 +82,11 @@ public class TPAceptarCommand {
                 MessageHelper.send(sender, "&6Peticion aceptada con exito!.");
                 MessageHelper.send(origen, "&c%s &6acepto tu peticion!".formatted(sender.getName()));
 
-                new InventoryHelper().removeItems(origen, MATERIAL_TYPE, MATERIAL_COST);
+                new InventoryHelper().removeItems(origen, TeleportCommander.getInstance().MATERIAL_TYPE, TeleportCommander.getInstance().MATERIAL_COST);
 
 
                 MessageHelper.send(origen, "&6Te he cobrado el costo del viaje.");
-                commander.removePlayerRequest(target.getName());
+                commander.removePlayerRequest(target.getName(), true);
                 return true;
             }
 

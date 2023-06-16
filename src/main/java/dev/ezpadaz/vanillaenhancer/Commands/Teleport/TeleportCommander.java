@@ -12,7 +12,12 @@ import java.util.HashMap;
 
 public class TeleportCommander {
     private static TeleportCommander instance;
+    private static boolean isTravelEnabled = false;
     public HashMap<String, TeleportDAO> teleportQueue;
+
+    public int MATERIAL_COST = 16;
+    public Material MATERIAL_TYPE = Material.GOLD_INGOT;
+    public String MATERIAL_NAME = "Lingotes de oro";
 
     public int REQUEST_TIMEOUT = 60;
 
@@ -23,6 +28,14 @@ public class TeleportCommander {
     public static TeleportCommander getInstance() {
         if (instance == null) instance = new TeleportCommander();
         return instance;
+    }
+
+    public boolean getTravelEnabled() {
+        return isTravelEnabled;
+    }
+
+    public void setTravelEnabled(boolean value){
+        isTravelEnabled = value;
     }
 
     // Creates the command instances.
@@ -69,11 +82,13 @@ public class TeleportCommander {
         return !(isLava && !bloque.isSolid());
     }
 
-    public void removePlayerRequest(String destino) {
+    public void removePlayerRequest(String destino, boolean silent) {
         Player jugador = Bukkit.getServer().getPlayer(destino);
 
         if (jugador != null && teleportQueue.containsKey(destino)) {
-            MessageHelper.send(jugador, "&6He cancelado las solicitudes pendientes que tenias :-)");
+            if (!silent) {
+                MessageHelper.send(jugador, "&6He cancelado las solicitudes pendientes que tenias :-)");
+            }
             teleportQueue.remove(destino);
         } else {
             MessageHelper.send(jugador, "&cNo tenias solicitudes pendientes.");
