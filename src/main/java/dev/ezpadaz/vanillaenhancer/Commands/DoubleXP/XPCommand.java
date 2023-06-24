@@ -1,9 +1,10 @@
 package dev.ezpadaz.vanillaenhancer.Commands.DoubleXP;
 
 import dev.ezpadaz.vanillaenhancer.Commands.BaseCommand;
-import dev.ezpadaz.vanillaenhancer.Listeners.Events.DoubleXPEvent;
+import dev.ezpadaz.vanillaenhancer.Commands.DoubleXP.Helper.XPEvent;
 import dev.ezpadaz.vanillaenhancer.Utils.ExperienceHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -15,11 +16,13 @@ import java.util.List;
 
 public class XPCommand {
     public XPCommand() {
+        
         new BaseCommand("dxp", 1, false) {
 
             @Override
             public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-                return null;
+                String[] help = new String[]{"get","status"};
+                return List.of(help);
             }
 
             @Override
@@ -28,13 +31,13 @@ public class XPCommand {
                 Player jugador = sender.getServer().getPlayer(sender.getName());
 
                 switch (cmd) {
-                    case "enable":
+                    case "enable" -> {
                         if (sender instanceof ConsoleCommandSender) {
                             // only allow enable by console.
-                            if (DoubleXPEvent.isEnabled) {
+                            if (XPEvent.isEnabled) {
                                 MessageHelper.console("Double XP Event was already active.");
                             } else {
-                                DoubleXPEvent.isEnabled = true;
+                                XPEvent.isEnabled = true;
                                 MessageHelper.console("Double XP Event enabled!");
                             }
                         } else {
@@ -43,13 +46,14 @@ public class XPCommand {
                             }
                         }
                         return true;
-                    case "disable":
+                    }
+                    case "disable" -> {
                         if (sender instanceof ConsoleCommandSender) {
                             // only allow disable by console.
-                            if (DoubleXPEvent.isEnabled) {
-                                DoubleXPEvent.isEnabled = false;
+                            if (XPEvent.isEnabled) {
+                                XPEvent.isEnabled = false;
                                 MessageHelper.console("Double XP Event disabled!");
-                                DoubleXPEvent.bannedPlayers = new ArrayList<>();
+                                XPEvent.bannedPlayers = new ArrayList<>();
                                 MessageHelper.consoleDebug("Banned Player List from Event has been wiped.");
                             }
                         } else {
@@ -58,10 +62,12 @@ public class XPCommand {
                             }
                         }
                         return true;
-                    case "status":
-                        MessageHelper.send(sender, "Double XP Event: &c" + DoubleXPEvent.isEnabled);
+                    }
+                    case "status" -> {
+                        MessageHelper.send(sender, "Double XP Event: &c" + XPEvent.isEnabled);
                         return true;
-                    case "get":
+                    }
+                    case "get" -> {
                         if (jugador != null) {
                             int totalExpPoints = ExperienceHelper.getPlayerExp(jugador);
                             DecimalFormat formatter = new DecimalFormat("#,###");
@@ -69,30 +75,33 @@ public class XPCommand {
                             MessageHelper.send(sender, "Tienes: " + formattedExp + " EXP");
                         }
                         return true;
-                    case "optin":
+                    }
+                    case "optin" -> {
                         if (jugador != null) {
-                            if (DoubleXPEvent.optedInPlayers.contains(jugador.getName())) {
+                            if (XPEvent.optedInPlayers.contains(jugador.getName())) {
                                 MessageHelper.send(jugador, "You are already receiving XP Updates");
                             } else {
-                                DoubleXPEvent.optedInPlayers.add(jugador.getName());
+                                XPEvent.optedInPlayers.add(jugador.getName());
                                 MessageHelper.send(jugador, "You have opted-in to receive XP Updates");
                             }
                         }
                         return true;
-                    case "optout":
+                    }
+                    case "optout" -> {
                         if (jugador != null) {
-                            if (DoubleXPEvent.optedInPlayers.contains(jugador.getName())) {
-                                DoubleXPEvent.optedInPlayers.remove(jugador.getName());
+                            if (XPEvent.optedInPlayers.contains(jugador.getName())) {
+                                XPEvent.optedInPlayers.remove(jugador.getName());
                                 MessageHelper.send(jugador, "You have opted out of receiving XP Updates");
                             } else {
                                 MessageHelper.send(jugador, "You can't opt-out if you are not receiving updates already.");
                             }
                         }
                         return true;
-                    case "wipecd":
+                    }
+                    case "wipecd" -> {
                         if (sender instanceof ConsoleCommandSender) {
                             // only allow disable by console.
-                            DoubleXPEvent.bannedPlayers = new ArrayList<>();
+                            XPEvent.bannedPlayers = new ArrayList<>();
                             MessageHelper.console("Wiped banned players from 2XP Event");
                         } else {
                             if (sender instanceof Player p) {
@@ -100,8 +109,10 @@ public class XPCommand {
                             }
                         }
                         return true;
-                    default:
+                    }
+                    default -> {
                         return true;
+                    }
                 }
             }
 

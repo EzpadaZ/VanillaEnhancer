@@ -1,5 +1,6 @@
 package dev.ezpadaz.vanillaenhancer.Commands;
 
+import dev.ezpadaz.vanillaenhancer.Utils.GeneralUtils;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
 import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
 import org.bukkit.Bukkit;
@@ -26,6 +27,7 @@ public abstract class BaseCommand extends BukkitCommand implements TabExecutor {
 
     public BaseCommand(String command, int requiredArguments) {
         this(command, requiredArguments, requiredArguments);
+
     }
 
     public BaseCommand(String command, boolean playerOnly) {
@@ -94,9 +96,9 @@ public abstract class BaseCommand extends BukkitCommand implements TabExecutor {
             }
 
             delayedPlayers.add(sender.getName());
-            Bukkit.getScheduler().scheduleSyncDelayedTask(VanillaEnhancer.getInstance(), () -> {
+            GeneralUtils.scheduleTask(()->{
                 delayedPlayers.remove(sender.getName());
-            }, 20L * delay);
+            }, delay);
         }
 
         if (!onCommand(sender, arguments)) {

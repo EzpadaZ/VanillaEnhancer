@@ -1,10 +1,8 @@
-package dev.ezpadaz.vanillaenhancer.Listeners.Events;
+package dev.ezpadaz.vanillaenhancer.Commands.DoubleXP.Helper;
 
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
 import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 
@@ -12,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class DoubleXPEvent implements Listener {
+public class XPEvent {
     public static boolean isEnabled = false;
 
     public static ArrayList<String> optedInPlayers = new ArrayList<String>();
@@ -20,9 +18,7 @@ public class DoubleXPEvent implements Listener {
 
     public static HashMap<String, Integer> doubleXpDeathCount = new HashMap<>();
 
-    @EventHandler
-    public void playerExpChange(PlayerExpChangeEvent event) {
-
+    public static void checkForExpChange(PlayerExpChangeEvent event){
         int multiplier = Objects.requireNonNull(VanillaEnhancer.getInstance().config.getConfigurationSection("double-xp")).getInt("multiplier");
 
         if (multiplier == 0) {
@@ -54,8 +50,7 @@ public class DoubleXPEvent implements Listener {
         }
     }
 
-    @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event) {
+    public static void checkForPlayerDeath(PlayerDeathEvent event){
         if (isEnabled) {
             int deathCooldown = Objects.requireNonNull(VanillaEnhancer.getInstance().config.getConfigurationSection("double-xp")).getInt("death-cooldown");
             // if double XP is enabled we must cool down the player if he dies more than 3 times when the event is enabled.
@@ -69,7 +64,7 @@ public class DoubleXPEvent implements Listener {
             doubleXpDeathCount.put(jugador.getName(), deathCount + 1);
 
             if (deathCount >= deathCooldown) {
-                DoubleXPEvent.bannedPlayers.add(jugador.getName());
+                bannedPlayers.add(jugador.getName());
                 MessageHelper.send(jugador, "You died too much on 2XP Day, You are no longer participating.");
             }
         }

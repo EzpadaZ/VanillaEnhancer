@@ -9,5 +9,6 @@ public class CommandBootloader {
         new XPCommand();
         new TestCommand();
         TeleportCommander.getInstance().setupCommander();
+
     }
 }

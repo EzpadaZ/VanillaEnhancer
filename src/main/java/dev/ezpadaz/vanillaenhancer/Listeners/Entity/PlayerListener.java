@@ -1,13 +1,36 @@
 package dev.ezpadaz.vanillaenhancer.Listeners.Entity;
 
+import dev.ezpadaz.vanillaenhancer.Commands.DoubleXP.Helper.XPEvent;
+import dev.ezpadaz.vanillaenhancer.Utils.Database.Operations.PlayerOperations;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerExpChangeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerListener implements Listener {
 
     @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event){
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        // player joins the server
+        PlayerOperations.savePlayerData(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onPlayerDisconnect(PlayerQuitEvent event) {
+        // player joined the server.
+        PlayerOperations.savePlayerData(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onPlayerExpChange(PlayerExpChangeEvent event) {
+        XPEvent.checkForExpChange(event);
+    }
+
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event) {
         // death event.
+        XPEvent.checkForPlayerDeath(event);
     }
 }

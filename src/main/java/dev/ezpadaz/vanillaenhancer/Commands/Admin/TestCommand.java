@@ -1,7 +1,11 @@
 package dev.ezpadaz.vanillaenhancer.Commands.Admin;
 
 import dev.ezpadaz.vanillaenhancer.Commands.BaseCommand;
+import dev.ezpadaz.vanillaenhancer.Utils.EffectHelper;
+import dev.ezpadaz.vanillaenhancer.Utils.GeneralUtils;
 import dev.ezpadaz.vanillaenhancer.Utils.InventoryHelper;
+import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
+import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -20,9 +24,10 @@ public class TestCommand {
 
             @Override
             public boolean onCommand(CommandSender sender, String[] arguments) {
-                if (sender instanceof Player p) {
-                    new InventoryHelper().hasItem(p, Material.GOLD_INGOT, 32);
-                }
+                Player jugador = GeneralUtils.getPlayer(sender.getName());
+                MessageHelper.console("Is it null: "+(jugador == null));
+                if(jugador == null) return true;
+
                 return true;
             }
 

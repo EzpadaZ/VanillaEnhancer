@@ -1,6 +1,7 @@
 package dev.ezpadaz.vanillaenhancer.Commands.Teleport;
 
 import dev.ezpadaz.vanillaenhancer.Commands.BaseCommand;
+import dev.ezpadaz.vanillaenhancer.Utils.EffectHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.GeneralUtils;
 import dev.ezpadaz.vanillaenhancer.Utils.InventoryHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
@@ -22,8 +23,6 @@ public class TPAceptarCommand {
                 return null;
             }
 
-            final int TELEPORT_DELAY = 1;
-
             @Override
             public boolean onCommand(CommandSender sender, String[] arguments) {
                 TeleportCommander commander = TeleportCommander.getInstance();
@@ -34,9 +33,8 @@ public class TPAceptarCommand {
                     return true;
                 }
 
-                Player origen = VanillaEnhancer.getInstance().getServer().getPlayer(executor.getOrigen());
-                Player target = VanillaEnhancer.getInstance().getServer().getPlayer(sender.getName());
-
+                Player origen = GeneralUtils.getPlayer(executor.getOrigen());
+                Player target = GeneralUtils.getPlayer(sender.getName());
 
                 if (origen == null) {
                     MessageHelper.send(sender, "&cEl usuario que origino esta peticion no existe o no se encuentra.");
@@ -56,34 +54,18 @@ public class TPAceptarCommand {
 
                 if (executor.isGoingTo()) {
                     Location location = target.getLocation();
-                    if (commander.isSafe(location) && !target.isFlying() && !target.isGliding()) {
-                        // player is safe to go to, is not flying nor gliding (some mofos, man).
-                        GeneralUtils.scheduleTask(() -> {
-                            origen.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
-                        }, TELEPORT_DELAY);
-                    } else {
-                        MessageHelper.send(origen, "&cHe cancelado el viaje ya que no es seguro.");
-                        return true;
-                    }
+                    commander.addLocationToMemory(origen.getName(), origen.getLocation());
+                    commander.teleportPlayer(origen, location, commander.TELEPORT_DELAY);
                 } else {
                     Location location = origen.getLocation();
-                    if (commander.isSafe(location) && !origen.isFlying() && !origen.isGliding()) {
-                        // player is safe to go to, is not flying nor gliding (some mofos, man).
-                        GeneralUtils.scheduleTask(() -> {
-                            target.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
-                        }, TELEPORT_DELAY);
-                    } else {
-                        // not safe, tell the player.
-                        MessageHelper.send(target, "&cHe cancelado el viaje ya que no es seguro.");
-                        return true;
-                    }
+                    commander.addLocationToMemory(target.getName(), target.getLocation());
+                    commander.teleportPlayer(target, location, commander.TELEPORT_DELAY);
                 }
 
                 MessageHelper.send(sender, "&6Peticion aceptada con exito!.");
                 MessageHelper.send(origen, "&c%s &6acepto tu peticion!".formatted(sender.getName()));
 
                 new InventoryHelper().removeItems(origen, TeleportCommander.getInstance().MATERIAL_TYPE, TeleportCommander.getInstance().MATERIAL_COST);
-
 
                 MessageHelper.send(origen, "&6Te he cobrado el costo del viaje.");
                 commander.removePlayerRequest(target.getName(), true);
@@ -92,7 +74,7 @@ public class TPAceptarCommand {
 
             @Override
             public String getUsage() {
-                return "/aceptar [Acepta la solicitud de viaje que tengas en cola]";
+                return "/aceptar [Acepta la solicitud de viaje que tengas en tu pinche cola]";
             }
         };
     }
