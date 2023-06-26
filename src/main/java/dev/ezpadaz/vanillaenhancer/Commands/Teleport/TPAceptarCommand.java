@@ -54,20 +54,13 @@ public class TPAceptarCommand {
 
                 if (executor.isGoingTo()) {
                     Location location = target.getLocation();
-                    commander.addLocationToMemory(origen.getName(), origen.getLocation());
-                    commander.teleportPlayer(origen, location, commander.TELEPORT_DELAY);
+                    commander.teleportPlayer(origen, target, location, commander.TELEPORT_DELAY);
                 } else {
                     Location location = origen.getLocation();
-                    commander.addLocationToMemory(target.getName(), target.getLocation());
-                    commander.teleportPlayer(target, location, commander.TELEPORT_DELAY);
+                    commander.teleportPlayer(target, origen, location, commander.TELEPORT_DELAY);
                 }
 
-                MessageHelper.send(sender, "&6Peticion aceptada con exito!.");
-                MessageHelper.send(origen, "&c%s &6acepto tu peticion!".formatted(sender.getName()));
-
                 new InventoryHelper().removeItems(origen, TeleportCommander.getInstance().MATERIAL_TYPE, TeleportCommander.getInstance().MATERIAL_COST);
-
-                MessageHelper.send(origen, "&6Te he cobrado el costo del viaje.");
                 commander.removePlayerRequest(target.getName(), true);
                 return true;
             }

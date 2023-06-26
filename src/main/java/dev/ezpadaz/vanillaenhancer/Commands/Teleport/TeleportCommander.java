@@ -17,13 +17,14 @@ public class TeleportCommander {
     private static boolean isTravelEnabled = false;
     public HashMap<String, TeleportDAO> teleportQueue;
     public HashMap<String, Location> locationMemory;
-    public int MATERIAL_COST = 16;
+    public int MATERIAL_COST = 4;
     public int TRAVEL_BACK_MATERIAL_COST = MATERIAL_COST / 2;
     public Material MATERIAL_TYPE = Material.GOLD_INGOT;
     public String MATERIAL_NAME = "Lingotes de oro";
     public int REQUEST_TIMEOUT = 60;
     public int PREVIOUS_LOCATION_TIMEOUT = 300; // 5-minutes.
     public int TELEPORT_DELAY = 1;
+
     private TeleportCommander() {
         teleportQueue = new HashMap<>();
         locationMemory = new HashMap<>();
@@ -38,7 +39,7 @@ public class TeleportCommander {
         return isTravelEnabled;
     }
 
-    public void setTravelEnabled(boolean value){
+    public void setTravelEnabled(boolean value) {
         isTravelEnabled = value;
     }
 
@@ -70,34 +71,45 @@ public class TeleportCommander {
     public void addLocationToMemory(String owner, Location object) {
         locationMemory.put(owner, object);
         Player p = GeneralUtils.getPlayer(owner);
-        if(p != null) MessageHelper.send(p, "&6Tienes&c "+(PREVIOUS_LOCATION_TIMEOUT / 60)+" &6minutos para usar &a/regresar&6\nSe te cobrara &c"+(MATERIAL_COST/2)+" &3Lingotes de Oro.");
+        if (p != null)
+            MessageHelper.send(p, "&6Para volver a tu ubicacion anterior usa &a/regresar &6Se te cobrara &c" + (TRAVEL_BACK_MATERIAL_COST) + " &3Lingotes de Oro.");
 
-        GeneralUtils.scheduleTask(() -> {
-            if(locationMemory.get(owner) != null){
-                locationMemory.remove(owner);
-                Player jugador = GeneralUtils.getPlayer(owner);
-                if(jugador != null) MessageHelper.send(jugador, "Ha expirado tu tiempo para regresar a tu ubicacion anterior :-(");
-            }
-        }, PREVIOUS_LOCATION_TIMEOUT);
     }
 
-    public void removeLastLocation(String owner){
+    public void removeLastLocation(String owner) {
         locationMemory.remove(owner);
     }
 
-    public Location getPreviousLocation(String owner){
+    public Location getPreviousLocation(String owner) {
         return locationMemory.get(owner);
     }
 
-    public void teleportPlayer(Player player, Location destination, long TELEPORT_DELAY) {
-        if (isSafe(destination) && !player.isFlying() && !player.isGliding()) {
+    public void teleportPlayer(Player target, Player origin, Location destination, long TELEPORT_DELAY) {
+        if (isSafe(destination) && !origin.isFlying() && !origin.isGliding()) {
             GeneralUtils.scheduleTask(() -> {
-                EffectHelper.getInstance().strikeLightning(player);
-                player.teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN);
-                EffectHelper.getInstance().strikeLightning(player);
+                TeleportCommander.getInstance().addLocationToMemory(target.getName(), target.getLocation());
+                EffectHelper.getInstance().strikeLightning(target);
+                target.teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                EffectHelper.getInstance().strikeLightning(target);
+                MessageHelper.send(target, "&6Peticion aceptada con exito!.");
+                MessageHelper.send(origin, "&c%s &6acepto tu peticion!".formatted(target.getName()));
+                MessageHelper.send(origin, "&6Te he cobrado el costo del viaje.");
             }, TELEPORT_DELAY);
         } else {
-            MessageHelper.send(player, "&cHe cancelado el viaje ya que no es seguro.");
+            MessageHelper.send(target, "&cHe cancelado el viaje ya que no es seguro.");
+            MessageHelper.send(origin, "&cNo pude realizar el TP, lo vas a matar, reintentalo cuando estes en un lugar seguro, perro.");
+        }
+    }
+
+    public void unsafeTeleportPlayer(Player target, Location destination, long TELEPORT_DELAY) {
+        if (isSafe(destination)) {
+            GeneralUtils.scheduleTask(() -> {
+                EffectHelper.getInstance().strikeLightning(target);
+                target.teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN);
+                EffectHelper.getInstance().strikeLightning(target);
+            }, TELEPORT_DELAY);
+        } else {
+            MessageHelper.send(target, "&cHe cancelado el viaje ya que no es seguro.");
         }
     }
 

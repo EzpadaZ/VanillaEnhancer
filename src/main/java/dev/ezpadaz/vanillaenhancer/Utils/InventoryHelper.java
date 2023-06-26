@@ -28,6 +28,10 @@ public class InventoryHelper {
         return found;
     }
 
+    public static void removeSpecificItem(Player jugador, ItemStack item){
+        PlayerInventory playerInventory = jugador.getInventory();
+        playerInventory.remove(item);
+    }
 
     public void removeItems(Player player, Material type, int amount) {
         PlayerInventory playerInventory = player.getInventory();

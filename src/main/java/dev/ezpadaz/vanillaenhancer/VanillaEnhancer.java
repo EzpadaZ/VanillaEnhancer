@@ -31,7 +31,6 @@ public final class VanillaEnhancer extends JavaPlugin {
 
         // Database.
         Database.getInstance().init();
-        MessageHelper.consoleDebug("test");
 
         DependencyHelper.checkDependencies();
         MessageHelper.console("&6Plugin status: &aEnabled");
