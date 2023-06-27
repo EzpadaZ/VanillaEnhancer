@@ -7,6 +7,7 @@ import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -17,6 +18,10 @@ import java.util.UUID;
 public class GeneralUtils {
     public static int scheduleTask(Runnable task, long delay) {
         return Bukkit.getScheduler().scheduleSyncDelayedTask(VanillaEnhancer.getInstance(), task, 20L * delay);
+    }
+
+    public static void registerListener(Listener listener){
+        Bukkit.getPluginManager().registerEvents(listener, VanillaEnhancer.getInstance());
     }
 
     public static Player getPlayer(String name) {

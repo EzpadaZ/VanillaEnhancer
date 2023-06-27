@@ -4,11 +4,18 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.ChiseledBookshelf;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ChiseledBookshelfInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+
+import java.util.Map;
+import java.util.Objects;
 
 public class GameplayEnhancer {
     // There is a bug where books can be stored in the chiseled bookshelf.
@@ -44,6 +51,18 @@ public class GameplayEnhancer {
                     inventory.removeItem(returnedItem);
                     jugador.getInventory().addItem(returnedItem);
                 }
+            }
+        }
+    }
+
+    public static void infiniteArrowEnchantment(EntityShootBowEvent event) {
+        Map<Enchantment, Integer> bowEnchants = Objects.requireNonNull(event.getBow()).getEnchantments();
+        Entity shooter = event.getEntity();
+
+        if (shooter instanceof Player jugador) {
+            if (bowEnchants.containsKey(Enchantment.ARROW_INFINITE)) {
+                event.setConsumeItem(false);
+                jugador.updateInventory();
             }
         }
     }

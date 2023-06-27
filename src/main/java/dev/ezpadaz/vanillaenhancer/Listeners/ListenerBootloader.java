@@ -1,12 +1,13 @@
 package dev.ezpadaz.vanillaenhancer.Listeners;
 
+import dev.ezpadaz.vanillaenhancer.Listeners.Entity.EntityListener;
 import dev.ezpadaz.vanillaenhancer.Listeners.Entity.PlayerListener;
-import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
-import org.bukkit.Bukkit;
+import dev.ezpadaz.vanillaenhancer.Utils.GeneralUtils;
 
 public class ListenerBootloader {
 
     public ListenerBootloader() {
-        Bukkit.getPluginManager().registerEvents(new PlayerListener(), VanillaEnhancer.getInstance());
+        GeneralUtils.registerListener(new PlayerListener());
+        GeneralUtils.registerListener(new EntityListener());
     }
 }
