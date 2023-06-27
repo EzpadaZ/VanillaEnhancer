@@ -1,8 +1,8 @@
 package dev.ezpadaz.vanillaenhancer.Listeners.Entity;
 
 import dev.ezpadaz.vanillaenhancer.Commands.DoubleXP.Helper.XPEvent;
-import dev.ezpadaz.vanillaenhancer.Utils.Database.Operations.PlayerOperations;
-import dev.ezpadaz.vanillaenhancer.Utils.GeneralUtils;
+import dev.ezpadaz.vanillaenhancer.Utils.GameplayEnhancer;
+import dev.ezpadaz.vanillaenhancer.Utils.Telemetry.PlayerTelemetry;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -16,13 +16,13 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         // player joins the server
-        PlayerOperations.savePlayerData(event.getPlayer());
+        PlayerTelemetry.savePlayerData(event.getPlayer());
     }
 
     @EventHandler
     public void onPlayerDisconnect(PlayerQuitEvent event) {
         // player joined the server.
-        PlayerOperations.savePlayerData(event.getPlayer());
+        PlayerTelemetry.savePlayerData(event.getPlayer());
     }
 
     @EventHandler
@@ -34,11 +34,12 @@ public class PlayerListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         // death event.
         XPEvent.checkForPlayerDeath(event);
+        PlayerTelemetry.savePlayerDeath(event.getEntity().getPlayer());
     }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         // might be removed later.
-        GeneralUtils.saveEnchantedBook(event); // allows for ANY enchanted book to be saved in a chiseledbookshelf.
+        GameplayEnhancer.saveEnchantedBook(event); // allows for ANY enchanted book to be saved in a chiseledbookshelf.
     }
 }

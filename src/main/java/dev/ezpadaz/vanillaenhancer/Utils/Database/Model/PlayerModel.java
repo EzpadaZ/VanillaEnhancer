@@ -1,13 +1,10 @@
-package dev.ezpadaz.vanillaenhancer.Utils.Database;
+package dev.ezpadaz.vanillaenhancer.Utils.Database.Model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
-import dev.ezpadaz.vanillaenhancer.Utils.Database.Serializer.LocationSerializer;
 import dev.ezpadaz.vanillaenhancer.Utils.ExperienceHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.GeneralUtils;
 import dev.ezpadaz.vanillaenhancer.Utils.InventoryHelper;
-import org.bukkit.Location;
+import org.bson.Document;
 import org.bukkit.entity.Player;
 
 public class PlayerModel {
@@ -30,16 +27,22 @@ public class PlayerModel {
     private String expPoints;
 
     public PlayerModel(Player jugador) {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Location.class, new LocationSerializer())
-                .create();
-
         this.id = jugador.getUniqueId().toString();
         this.name = jugador.getName();
-        this.lastKnownLocation = gson.toJson(jugador.getLocation());
+        this.lastKnownLocation = GeneralUtils.getLocationSerializer().toJson(jugador.getLocation());
         this.expPoints = Integer.toString(ExperienceHelper.getPlayerExp(jugador));
         this.address = jugador.getAddress().toString();
         this.inventoryJson = GeneralUtils.getObjectJson(InventoryHelper.playerInventoryToBase64(jugador.getInventory()));
+    }
+
+    public Document getDocumentFormat() {
+        Document update = new Document();
+        update.append("$set", new Document("name", getName())
+                .append("lastKnowLocation", getLastKnownLocation())
+                .append("inventoryJson", getInventoryJson())
+                .append("address", getAddress())
+                .append("expPoints", getExpPoints()));
+        return update;
     }
 
     public String getId() {

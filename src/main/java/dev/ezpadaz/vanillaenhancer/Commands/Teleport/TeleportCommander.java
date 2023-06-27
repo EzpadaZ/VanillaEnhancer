@@ -3,6 +3,7 @@ package dev.ezpadaz.vanillaenhancer.Commands.Teleport;
 import dev.ezpadaz.vanillaenhancer.Utils.EffectHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.GeneralUtils;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
+import dev.ezpadaz.vanillaenhancer.Utils.Telemetry.PlayerTelemetry;
 import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -92,12 +93,12 @@ public class TeleportCommander {
                 target.teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN);
                 EffectHelper.getInstance().strikeLightning(target);
                 MessageHelper.send(target, "&6Peticion aceptada con exito!.");
-                MessageHelper.send(origin, "&c%s &6acepto tu peticion!".formatted(target.getName()));
-                MessageHelper.send(origin, "&6Te he cobrado el costo del viaje.");
+                MessageHelper.send(origin, "&c%s &6acepto tu peticion, he retirado el oro de tu inventario".formatted(target.getName()));
+                PlayerTelemetry.savePlayerTeleport(target, origin, destination);
             }, TELEPORT_DELAY);
         } else {
             MessageHelper.send(target, "&cHe cancelado el viaje ya que no es seguro.");
-            MessageHelper.send(origin, "&cNo pude realizar el TP, lo vas a matar, reintentalo cuando estes en un lugar seguro, perro.");
+            MessageHelper.send(origin, "&cNo pude realizar el viaje por que algo en tu ubicacion no es seguro para el otro sujeto.");
         }
     }
 

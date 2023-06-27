@@ -54,7 +54,6 @@ public class XPCommand {
                                 XPEvent.isEnabled = false;
                                 MessageHelper.console("Double XP Event disabled!");
                                 XPEvent.bannedPlayers = new ArrayList<>();
-                                MessageHelper.consoleDebug("Banned Player List from Event has been wiped.");
                             }
                         } else {
                             if (sender instanceof Player p) {
