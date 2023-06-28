@@ -14,6 +14,12 @@ public class PlayerModel {
     @SerializedName("name")
     private String name;
 
+    @SerializedName("currentlyOnline")
+    private boolean currentlyOnline;
+
+    @SerializedName("lastSeen")
+    private String lastSeen;
+
     @SerializedName("lastKnowLocation")
     private String lastKnownLocation;
 
@@ -35,10 +41,23 @@ public class PlayerModel {
         this.inventoryJson = GeneralUtils.getObjectJson(InventoryHelper.playerInventoryToBase64(jugador.getInventory()));
     }
 
+    public PlayerModel(Player jugador, boolean isOnline) {
+        this.id = jugador.getUniqueId().toString();
+        this.name = jugador.getName();
+        this.currentlyOnline = isOnline;
+        this.lastSeen = GeneralUtils.getISODate();
+        this.lastKnownLocation = GeneralUtils.getLocationSerializer().toJson(jugador.getLocation());
+        this.expPoints = Integer.toString(ExperienceHelper.getPlayerExp(jugador));
+        this.address = jugador.getAddress().toString();
+        this.inventoryJson = GeneralUtils.getObjectJson(InventoryHelper.playerInventoryToBase64(jugador.getInventory()));
+    }
+
     public Document getDocumentFormat() {
         Document update = new Document();
         update.append("$set", new Document("name", getName())
                 .append("lastKnowLocation", getLastKnownLocation())
+                .append("currentlyOnline", currentlyOnline)
+                .append("lastSeen", getLastSeen())
                 .append("inventoryJson", getInventoryJson())
                 .append("address", getAddress())
                 .append("expPoints", getExpPoints()));
@@ -47,6 +66,10 @@ public class PlayerModel {
 
     public String getId() {
         return id;
+    }
+
+    public String getLastSeen() {
+        return lastSeen;
     }
 
     public String getAddress() {

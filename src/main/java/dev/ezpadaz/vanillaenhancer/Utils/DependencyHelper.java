@@ -7,6 +7,8 @@ public class DependencyHelper {
     public static boolean hasReviveMe = false;
     public static boolean hasPlaceholderApi = false;
 
+    public static boolean hasAureliumSkills = false;
+
     public static void checkDependencies() {
         PluginManager pm = VanillaEnhancer.getInstance().getServer().getPluginManager();
 
@@ -18,6 +20,11 @@ public class DependencyHelper {
         if(pm.getPlugin("PlaceholderAPI") != null){
             hasPlaceholderApi = true;
             MessageHelper.console("PlaceholderAPI detected, enabled support for it.");
+        }
+
+        if(pm.getPlugin("AureliumSkills") != null){
+            hasAureliumSkills = true;
+            MessageHelper.console("AureliumSkills detected, enabled support for it.");
         }
     }
 

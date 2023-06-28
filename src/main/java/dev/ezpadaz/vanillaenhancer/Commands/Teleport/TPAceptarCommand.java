@@ -54,9 +54,11 @@ public class TPAceptarCommand {
 
                 if (executor.isGoingTo()) {
                     Location location = target.getLocation();
+                    EffectHelper.getInstance().smokeEffect(origen);
                     commander.teleportPlayer(origen, target, location, commander.TELEPORT_DELAY);
                 } else {
                     Location location = origen.getLocation();
+                    EffectHelper.getInstance().smokeEffect(target);
                     commander.teleportPlayer(target, origen, location, commander.TELEPORT_DELAY);
                 }
 

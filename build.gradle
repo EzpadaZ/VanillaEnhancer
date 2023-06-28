@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'dev.ezpadaz'
-version = '1.0.3'
+version = '1.0.4'
 
 repositories {
     mavenCentral()
@@ -16,6 +16,7 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
+    maven { url 'https://jitpack.io' }
 }
 
 jar {
@@ -32,7 +33,7 @@ shadowJar {
 
 dependencies {
     compileOnly "org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT"
-    implementation 'com.elmakers.mine.bukkit:EffectLib:9.4'
+    compileOnly 'com.github.Archy-X:AureliumSkills:Beta1.3.21'
     implementation fileTree(dir: 'libs', include: '*.jar')
 }
 

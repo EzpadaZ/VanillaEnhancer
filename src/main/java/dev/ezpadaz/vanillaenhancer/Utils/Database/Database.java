@@ -50,6 +50,14 @@ public class Database {
         return database.getCollection(collection);
     }
 
+    public void close() {
+        try{
+            client.close();
+        }catch(Exception e){
+            // do nothing.
+        }
+    }
+
     public static Database getInstance() {
         if (instance == null) instance = new Database();
         return instance;

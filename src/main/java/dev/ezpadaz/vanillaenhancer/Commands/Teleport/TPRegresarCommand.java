@@ -50,7 +50,6 @@ public class TPRegresarCommand {
                                     commander.unsafeTeleportPlayer(jugador, commander.getPreviousLocation(sender.getName()), commander.TELEPORT_DELAY);
                                     commander.removeLastLocation(sender.getName());
                                     new InventoryHelper().removeItems(jugador, commander.MATERIAL_TYPE, (commander.TRAVEL_BACK_MATERIAL_COST));
-                                    MessageHelper.send(jugador, "&6Te he regresado por un modico precio a tu ubicacion anterior, de nada :-)");
                                 } else {
                                     // no tiene, informarle amablemente que no tiene oro.
                                     MessageHelper.send(jugador, "&cNo me quieras ver la cara de pendejo, no tienes oro.");

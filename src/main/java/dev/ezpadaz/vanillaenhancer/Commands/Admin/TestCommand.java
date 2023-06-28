@@ -24,10 +24,7 @@ public class TestCommand {
 
             @Override
             public boolean onCommand(CommandSender sender, String[] arguments) {
-                Player jugador = GeneralUtils.getPlayer(sender.getName());
-                MessageHelper.console("Is it null: "+(jugador == null));
-                if(jugador == null) return true;
-
+                EffectHelper.getInstance().smokeEffect(sender.getServer().getPlayer(sender.getName()));
                 return true;
             }
 

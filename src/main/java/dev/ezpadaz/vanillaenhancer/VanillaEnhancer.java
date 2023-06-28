@@ -9,7 +9,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class VanillaEnhancer extends JavaPlugin {
-
     private static VanillaEnhancer instance;
     public FileConfiguration config = getConfig();
 
@@ -31,7 +30,6 @@ public final class VanillaEnhancer extends JavaPlugin {
 
         // Database.
         Database.getInstance().init();
-
         DependencyHelper.checkDependencies();
         MessageHelper.console("&6Running on: &c"+getServer().getVersion());
         MessageHelper.console("&6Plugin Version: &c"+getDescription().getVersion());

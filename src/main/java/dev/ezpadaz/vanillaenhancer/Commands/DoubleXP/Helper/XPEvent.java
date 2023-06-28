@@ -1,5 +1,7 @@
 package dev.ezpadaz.vanillaenhancer.Commands.DoubleXP.Helper;
 
+import com.archyx.aureliumskills.api.AureliumAPI;
+import com.archyx.aureliumskills.api.event.XpGainEvent;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
 import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
 import org.bukkit.entity.Player;
@@ -18,7 +20,7 @@ public class XPEvent {
 
     public static HashMap<String, Integer> doubleXpDeathCount = new HashMap<>();
 
-    public static void checkForExpChange(PlayerExpChangeEvent event){
+    public static void checkForExpChange(PlayerExpChangeEvent event) {
         int multiplier = Objects.requireNonNull(VanillaEnhancer.getInstance().config.getConfigurationSection("double-xp")).getInt("multiplier");
 
         if (multiplier == 0) {
@@ -34,23 +36,40 @@ public class XPEvent {
         if (isEnabled) {
             if (bannedPlayers.contains(jugador.getName())) {
                 if (logEnabled && optedInPlayers.contains(jugador.getName())) {
-                    MessageHelper.send(jugador, "You received: " + doubleExp + " XP (Reduced)");
+                    MessageHelper.send(jugador, "You received: " + obtainedExp + " XP (Reduced)");
                 }
                 event.setAmount(obtainedExp);
             } else {
                 if (logEnabled && optedInPlayers.contains(jugador.getName())) {
-                    MessageHelper.send(jugador, "You received: " + doubleExp + " (x" + multiplier + ") XP");
+                    MessageHelper.send(jugador, "You received: " + doubleExp + " ("+obtainedExp+" x " + multiplier + ") XP");
                 }
                 event.setAmount(doubleExp);
             }
-        } else {
-            if (logEnabled && optedInPlayers.contains(jugador.getName()))
-                MessageHelper.send(event.getPlayer(), "You received: " + obtainedExp + " XP");
-            event.setAmount(obtainedExp);
+            return;
+        }
+        if (logEnabled && optedInPlayers.contains(jugador.getName()))
+            MessageHelper.send(event.getPlayer(), "You received: " + obtainedExp + " XP");
+        event.setAmount(obtainedExp);
+
+    }
+
+    public static void checkForSkillXpChange(XpGainEvent event) {
+        double xpAmount = event.getAmount();
+        int multiplier = Objects.requireNonNull(VanillaEnhancer.getInstance().config.getConfigurationSection("double-xp")).getInt("multiplier");
+        if (multiplier == 0) {
+            // In case default value is 0 (null)
+            multiplier = 2;
+        }
+
+        double doubleXpAmount = xpAmount * multiplier;
+        if(isEnabled){
+            event.setAmount(doubleXpAmount);
+        }else{
+            event.setAmount(xpAmount);
         }
     }
 
-    public static void checkForPlayerDeath(PlayerDeathEvent event){
+    public static void checkForPlayerDeath(PlayerDeathEvent event) {
         if (isEnabled) {
             int deathCooldown = Objects.requireNonNull(VanillaEnhancer.getInstance().config.getConfigurationSection("double-xp")).getInt("death-cooldown");
             // if double XP is enabled we must cool down the player if he dies more than 3 times when the event is enabled.

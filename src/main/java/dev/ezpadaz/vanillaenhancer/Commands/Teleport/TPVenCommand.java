@@ -2,12 +2,15 @@ package dev.ezpadaz.vanillaenhancer.Commands.Teleport;
 
 import dev.ezpadaz.vanillaenhancer.Commands.BaseCommand;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
+import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class TPVenCommand {
@@ -17,7 +20,15 @@ public class TPVenCommand {
         new BaseCommand("ven", 1, true) {
             @Override
             public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-                return null;
+                List<String> list = new ArrayList<>();
+                Collection test = VanillaEnhancer.getInstance().getServer().getOnlinePlayers();
+                for (Object player : test) {
+                    if (player instanceof Player) {
+                        Player spigotPlayer = (Player) player;
+                        list.add(spigotPlayer.getName());
+                    }
+                }
+                return list;
             }
 
             @Override

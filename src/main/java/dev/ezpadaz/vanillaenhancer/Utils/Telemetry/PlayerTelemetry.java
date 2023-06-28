@@ -11,9 +11,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class PlayerTelemetry {
-    public static void savePlayerData(Player jugador) {
+    public static void savePlayerData(Player jugador, boolean isOnline) {
         MongoCollection users = Database.getInstance().getCollection("Users");
-        PlayerModel modelo = new PlayerModel(jugador);
+        PlayerModel modelo = new PlayerModel(jugador, isOnline);
         Document filter = new Document("_id", modelo.getId());
 
         UpdateOptions options = new UpdateOptions().upsert(true);
