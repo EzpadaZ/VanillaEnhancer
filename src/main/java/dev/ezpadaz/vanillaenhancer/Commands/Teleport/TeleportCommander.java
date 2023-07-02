@@ -1,8 +1,10 @@
 package dev.ezpadaz.vanillaenhancer.Commands.Teleport;
 
+import dev.ezpadaz.vanillaenhancer.Utils.Database.Model.Config.ConfigurationModel;
 import dev.ezpadaz.vanillaenhancer.Utils.EffectHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.GeneralUtils;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
+import dev.ezpadaz.vanillaenhancer.Utils.SettingsHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.Telemetry.PlayerTelemetry;
 import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
 import org.bukkit.Bukkit;
@@ -10,25 +12,32 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class TeleportCommander {
     private static TeleportCommander instance;
-    private static boolean isTravelEnabled = false;
+    private static boolean TRAVEL_ACTIVE = false;
     public HashMap<String, TeleportDAO> teleportQueue;
     public HashMap<String, Location> locationMemory;
-    public int MATERIAL_COST = 4;
-    public int TRAVEL_BACK_MATERIAL_COST = MATERIAL_COST / 2;
-    public Material MATERIAL_TYPE = Material.GOLD_INGOT;
-    public String MATERIAL_NAME = "Lingotes de oro";
-    public int REQUEST_TIMEOUT = 60;
-    public int PREVIOUS_LOCATION_TIMEOUT = 300; // 5-minutes.
-    public int TELEPORT_DELAY = 1;
+
+    public HashMap<String, Integer> activeTasks;
+    public int MATERIAL_COST;
+    public int TRAVEL_BACK_MATERIAL_COST;
+    public Material MATERIAL_TYPE;
+    public String MATERIAL_NAME;
+    public int REQUEST_TIMEOUT;
+    public int TELEPORT_DELAY;
 
     private TeleportCommander() {
         teleportQueue = new HashMap<>();
         locationMemory = new HashMap<>();
+        activeTasks = new HashMap<>();
+        configure();
     }
 
     public static TeleportCommander getInstance() {
@@ -36,28 +45,52 @@ public class TeleportCommander {
         return instance;
     }
 
-    public boolean getTravelEnabled() {
-        return isTravelEnabled;
+    public void configure() {
+        ConfigurationModel settings = SettingsHelper.getInstance().getSettings();
+        MATERIAL_COST = settings.getTp_cost();
+        TRAVEL_BACK_MATERIAL_COST = MATERIAL_COST / 2;
+
+        MATERIAL_TYPE = GeneralUtils.getMaterial(settings.getTp_material());
+        ItemStack itemStack = new ItemStack(MATERIAL_TYPE);
+        ItemMeta itemMeta = itemStack.getItemMeta();
+
+        if (itemMeta.hasDisplayName()) {
+            MATERIAL_NAME = itemMeta.getLocalizedName();
+        } else {
+            MATERIAL_NAME = itemMeta.getDisplayName();
+        }
+
+        if (MATERIAL_NAME.equals("")) {
+            MATERIAL_NAME = settings.getTp_material_name();
+        }
+
+        REQUEST_TIMEOUT = settings.getTp_threshold();
+        TELEPORT_DELAY = settings.getTp_delay();
+        TRAVEL_ACTIVE = settings.getTp_enabled();
     }
 
-    public void setTravelEnabled(boolean value) {
-        isTravelEnabled = value;
+    public boolean getTravelEnabled() {
+        return TRAVEL_ACTIVE;
     }
 
     // Creates the command instances.
     public void setupCommander() {
-        new TPVoyCommand();
-        new TPRechazarCommand();
-        new TPAceptarCommand();
-        new TPVenCommand();
-        new TPRegresarCommand();
+        GeneralUtils.registerCommand(new TPRechazarCommand());
+        GeneralUtils.registerCommand(new TPRegresarCommand());
+        GeneralUtils.registerCommand(new TPVoyCommand());
+        GeneralUtils.registerCommand(new TPVenCommand());
+        GeneralUtils.registerCommand(new TPAceptarCommand());
     }
 
     public void addPlayerRequest(String destino, TeleportDAO data) {
-        teleportQueue.remove(destino);
+        if (teleportQueue.get(destino) != null) {
+            // remove previous request.
+            removeTeleportTask(data.getOrigen()); // removes the previous owner task.
+            teleportQueue.remove(destino); // cleans the queue for this player.
+        }
 
-        teleportQueue.put(destino, data);
-        GeneralUtils.scheduleTask(() -> {
+        teleportQueue.put(destino, data); // puts new data.
+        int taskID = GeneralUtils.scheduleTask(() -> {
             Player target = Bukkit.getPlayer(destino);
 
             if (target != null && teleportQueue.containsKey(destino)) {
@@ -67,6 +100,50 @@ public class TeleportCommander {
             teleportQueue.remove(destino);
         }, REQUEST_TIMEOUT);
 
+        activeTasks.put(data.getOrigen(), taskID); // saves the requester name with the assigned task id.
+    }
+
+    public void removeTeleportTask(String origen) {
+        Integer task = activeTasks.get(origen);
+
+        if (task != null) {
+            Bukkit.getScheduler().cancelTask(task);
+
+            Player jugador = GeneralUtils.getPlayer(origen);
+            if (jugador != null) MessageHelper.send(jugador, "&cHe cancelado el viaje :-)");
+        }
+    }
+
+    public void cancelTrip(String origen) {
+        TeleportDAO object = searchForOrigin(origen); // get the object
+
+        if (object == null) {
+            MessageHelper.send(GeneralUtils.getPlayer(origen), "&cNo hay nada que cancelar."); // warn the trip was cancelled.
+            return;
+        }
+        Player jugador = GeneralUtils.getPlayer(object.getDestino()); // get the player from object
+        removeTeleportTask(origen); // remove the task id.
+        if (jugador != null) {
+            MessageHelper.send(jugador, "&c%s &6ha cancelado el viaje.".formatted(origen)); // warn the trip was cancelled.
+        }
+        removePlayerRequest(object.getDestino(), true);
+    }
+
+    @Nullable
+    private TeleportDAO searchForOrigin(String origin) {
+        for (TeleportDAO object : teleportQueue.values()) {
+            if (object.getOrigen().equals(origin)) {
+                return object;
+            }
+        }
+        return null;
+    }
+
+    public void cancelAllActiveTasks() {
+        for (Integer ID : activeTasks.values()) {
+            Bukkit.getScheduler().cancelTask(ID);
+        }
+        MessageHelper.console("&cAll active teleport tasks have been killed.");
     }
 
     public void addLocationToMemory(String owner, Location object) {
@@ -87,6 +164,7 @@ public class TeleportCommander {
 
     public void teleportPlayer(Player target, Player origin, Location destination, long TELEPORT_DELAY) {
         if (isSafe(destination) && !origin.isFlying() && !origin.isGliding()) {
+            EffectHelper.getInstance().smokeEffect(target);
             GeneralUtils.scheduleTask(() -> {
                 TeleportCommander.getInstance().addLocationToMemory(target.getName(), target.getLocation());
                 EffectHelper.getInstance().strikeLightning(target);
@@ -104,6 +182,7 @@ public class TeleportCommander {
 
     public void unsafeTeleportPlayer(Player target, Location destination, long TELEPORT_DELAY) {
         if (isSafe(destination)) {
+            EffectHelper.getInstance().smokeEffect(target);
             GeneralUtils.scheduleTask(() -> {
                 EffectHelper.getInstance().strikeLightning(target);
                 target.teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN);
@@ -138,7 +217,9 @@ public class TeleportCommander {
 
         if (jugador != null && teleportQueue.containsKey(destino)) {
             if (!silent) {
+                Player origen = GeneralUtils.getPlayer(teleportQueue.get(destino).getOrigen());
                 MessageHelper.send(jugador, "&6He cancelado las solicitudes pendientes que tenias :-)");
+                MessageHelper.send(origen, "&c%s &6te mando a la verga, ni modo.".formatted(jugador.getName()));
             }
             teleportQueue.remove(destino);
         } else {

@@ -1,4 +1,4 @@
-package dev.ezpadaz.vanillaenhancer.Utils.Database.Model;
+package dev.ezpadaz.vanillaenhancer.Utils.Database.Model.Player;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -10,6 +10,8 @@ import dev.ezpadaz.vanillaenhancer.Utils.InventoryHelper;
 import org.bson.Document;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+
+import java.util.Date;
 
 public class PlayerDeathModel {
 
@@ -25,7 +27,7 @@ public class PlayerDeathModel {
     private String inventoryAtDeath;
 
     @SerializedName("eventDate")
-    private String eventDate;
+    private Date eventDate;
 
     public PlayerDeathModel(Player jugador) {
         Gson gson = new GsonBuilder()
@@ -55,7 +57,7 @@ public class PlayerDeathModel {
         return playerID;
     }
 
-    public String getEventDate() {
+    public Date getEventDate() {
         return eventDate;
     }
 

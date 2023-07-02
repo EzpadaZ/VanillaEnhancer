@@ -1,74 +1,55 @@
 package dev.ezpadaz.vanillaenhancer.Commands.Teleport;
 
-import dev.ezpadaz.vanillaenhancer.Commands.BaseCommand;
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.annotation.*;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
-import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
-public class TPVenCommand {
-    public TPVenCommand() {
+@CommandAlias("ven|traer")
+@Description("Trae a un jugador a tu ubicacion.")
+public class TPVenCommand extends BaseCommand {
 
+    @Default
+    @CommandCompletion("@players")
+    public void onTripRequest(Player origen, String[] args) {
+        TeleportCommander commander = TeleportCommander.getInstance();
+        Player target = Bukkit.getPlayer(args[0]);
 
-        new BaseCommand("ven", 1, true) {
-            @Override
-            public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-                List<String> list = new ArrayList<>();
-                Collection test = VanillaEnhancer.getInstance().getServer().getOnlinePlayers();
-                for (Object player : test) {
-                    if (player instanceof Player) {
-                        Player spigotPlayer = (Player) player;
-                        list.add(spigotPlayer.getName());
-                    }
-                }
-                return list;
-            }
+        if (origen == null) {
+            MessageHelper.send(origen, "??????????????");
+            return;
+        }
 
-            @Override
-            public boolean onCommand(CommandSender sender, String[] arguments) {
-                Player target = Bukkit.getPlayer(arguments[0]);
-                Player origen = Bukkit.getPlayer(sender.getName());
+        if (target == null) {
+            MessageHelper.send(origen, "&cEl jugador no esta en linea o no existe.");
+            return;
+        }
 
-                if (origen == null) {
-                    MessageHelper.send(origen, "??????????????");
-                    return true;
-                }
+        if (origen.getName().equals(target.getName())) {
+            MessageHelper.send(origen, "&cNo puedes mandarte esta solicitud a ti mismo.");
+            return;
+        }
 
-                if (target == null) {
-                    MessageHelper.send(origen, "&cEl jugador no esta en linea o no existe.");
-                    return true;
-                }
+        if (!origen.getInventory().contains(commander.MATERIAL_TYPE, commander.MATERIAL_COST)) {
+            MessageHelper.send(origen, "&6No tienes &c%s &3%s &6para realizar el viaje :-(".formatted(commander.MATERIAL_COST, commander.MATERIAL_NAME));
+            return;
+        }
 
-                if (origen.getName().equals(target.getName())) {
-                    MessageHelper.send(origen, "&cNo puedes mandarte esta solicitud a ti mismo.");
-                    return true;
-                }
+        if (!commander.getTravelEnabled()) {
+            MessageHelper.send(origen, "&cLos viajes se encuentran desactivados de momento, contacta al administrador :-)");
+            return;
+        }
 
-                if (!origen.getInventory().contains(TeleportCommander.getInstance().MATERIAL_TYPE, TeleportCommander.getInstance().MATERIAL_COST)) {
-                    MessageHelper.send(origen, "&6No tienes &c%s &3%s &6para realizar el viaje :-(".formatted(TeleportCommander.getInstance().MATERIAL_COST, TeleportCommander.getInstance().MATERIAL_NAME));
-                    return true;
-                }
+        commander.addPlayerRequest(target.getName(), new TeleportDAO(origen.getName(), target.getName(), false));
+        String peticionText = "&c%s &6quiere que vayas hacia su ubicacion, escribe &a/aceptar&6/&a/si&6/&a/a&6 en los siguientes &c%s segundos &6para autorizar esta peticion.".formatted(origen.getName(), commander.REQUEST_TIMEOUT);
+        MessageHelper.send(target, peticionText);
+        MessageHelper.send(origen, "&6Solicitud enviada!\n\nEsto tendra un costo de: &c%s &3%s &6cuando &c%s &6acepte el proceso.".formatted(commander.MATERIAL_COST, commander.MATERIAL_NAME, target.getName()));
+    }
 
-                TeleportCommander commander = TeleportCommander.getInstance();
-                commander.addPlayerRequest(target.getName(), new TeleportDAO(origen.getName(), target.getName(), false));
-
-                String peticionText = "&c%s &6quiere que vayas hacia su ubicacion, escribe &a/aceptar&6 en los siguientes &c%s segundos &6para autorizar esta peticion.".formatted(sender.getName(), commander.REQUEST_TIMEOUT);
-                MessageHelper.send(target, peticionText);
-                MessageHelper.send(origen, "&6Solicitud enviada!\n\nEsto tendra un costo de: &c%s &3%s &6cuando &c%s &6acepte el proceso.".formatted(TeleportCommander.getInstance().MATERIAL_COST, TeleportCommander.getInstance().MATERIAL_NAME, target.getName()));
-                return true;
-            }
-
-            @Override
-            public String getUsage() {
-                return "/ven {nombre}   [Lleva al padrino de tu eleccion a tu ubicacion]";
-            }
-        };
+    @Subcommand("cancelar|c")
+    public void onTripCancel(Player origen) {
+        TeleportCommander.getInstance().cancelTrip(origen.getName());
     }
 }

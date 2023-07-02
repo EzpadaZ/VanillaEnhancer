@@ -2,6 +2,7 @@ package dev.ezpadaz.vanillaenhancer.Utils.Database;
 
 import com.mongodb.client.*;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
+import dev.ezpadaz.vanillaenhancer.Utils.SettingsHelper;
 import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -36,13 +37,14 @@ public class Database {
         // Add the console handler to the MongoDB logger
         mongoLogger.addHandler(consoleHandler);
 
-        MessageHelper.console("Trying to connect to: " + connectionString);
         try {
             client = MongoClients.create(connectionString);
             database = client.getDatabase("minecraft");
-            MessageHelper.console("&6Conectado a la base de datos en: &c" + connectionString);
+            MessageHelper.console("&6Connected to: &c" + connectionString);
+            SettingsHelper.getInstance().setupConfig();
         } catch (Exception e) {
-            MessageHelper.console("&cNo se pudo conectar a MongoDB :-(");
+            MessageHelper.console("&cWe fucking died trying to connect to MongoDB.");
+            MessageHelper.console("&c"+e.getMessage());
         }
     }
 

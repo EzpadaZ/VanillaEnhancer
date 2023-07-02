@@ -5,7 +5,6 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.ChiseledBookshelf;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -35,12 +34,9 @@ public class GameplayEnhancer {
             if (item != null && item.getType() == Material.ENCHANTED_BOOK) {
                 // is a valid enchantment book, save it in the storage.
                 Vector pos = event.getClickedPosition();
-                if (pos == null) return; // null prevention
                 int bslot = bookshelf.getSlot(pos); // gets chiseled_bookshelf looked at position.
-
                 ItemStack tempItem = inventory.getItem(bslot);
                 Player jugador = event.getPlayer();
-
 
                 if (tempItem == null) {
                     inventory.setItem(bslot, item);

@@ -1,14 +1,19 @@
 package dev.ezpadaz.vanillaenhancer.Commands;
 
+import dev.ezpadaz.vanillaenhancer.Commands.Admin.Commander;
 import dev.ezpadaz.vanillaenhancer.Commands.Admin.TestCommand;
 import dev.ezpadaz.vanillaenhancer.Commands.DoubleXP.XPCommand;
+import dev.ezpadaz.vanillaenhancer.Commands.Misc.CancelarCommand;
 import dev.ezpadaz.vanillaenhancer.Commands.Teleport.*;
+import dev.ezpadaz.vanillaenhancer.Utils.GeneralUtils;
 
 public class CommandBootloader {
     public CommandBootloader() {
-        new XPCommand();
-        new TestCommand();
         TeleportCommander.getInstance().setupCommander();
-
+        GeneralUtils.registerCommand(new XPCommand());
+        GeneralUtils.registerCommand(new TestCommand());
+        GeneralUtils.registerCommand(new CancelarCommand());
+        GeneralUtils.registerCommand(new TCCommand());
+        GeneralUtils.registerCommand(new Commander());
     }
 }

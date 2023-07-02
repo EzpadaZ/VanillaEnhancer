@@ -1,4 +1,4 @@
-package dev.ezpadaz.vanillaenhancer.Utils.Database.Model;
+package dev.ezpadaz.vanillaenhancer.Utils.Database.Model.Player;
 
 import com.google.gson.annotations.SerializedName;
 import dev.ezpadaz.vanillaenhancer.Utils.ExperienceHelper;
@@ -6,6 +6,8 @@ import dev.ezpadaz.vanillaenhancer.Utils.GeneralUtils;
 import dev.ezpadaz.vanillaenhancer.Utils.InventoryHelper;
 import org.bson.Document;
 import org.bukkit.entity.Player;
+
+import java.util.Date;
 
 public class PlayerModel {
     @SerializedName("_id")
@@ -18,7 +20,7 @@ public class PlayerModel {
     private boolean currentlyOnline;
 
     @SerializedName("lastSeen")
-    private String lastSeen;
+    private Date lastSeen;
 
     @SerializedName("lastKnowLocation")
     private String lastKnownLocation;
@@ -68,7 +70,7 @@ public class PlayerModel {
         return id;
     }
 
-    public String getLastSeen() {
+    public Date getLastSeen() {
         return lastSeen;
     }
 

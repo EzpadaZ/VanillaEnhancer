@@ -1,10 +1,12 @@
-package dev.ezpadaz.vanillaenhancer.Utils.Database.Model;
+package dev.ezpadaz.vanillaenhancer.Utils.Database.Model.Player;
 
 import com.google.gson.annotations.SerializedName;
 import dev.ezpadaz.vanillaenhancer.Utils.GeneralUtils;
 import org.bson.Document;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+
+import java.util.Date;
 
 public class PlayerTeleportModel {
 
@@ -18,7 +20,7 @@ public class PlayerTeleportModel {
     private String originID;
 
     @SerializedName("date")
-    private String date;
+    private Date date;
 
     @SerializedName("location")
     private String location;
@@ -53,7 +55,7 @@ public class PlayerTeleportModel {
         return originID;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 

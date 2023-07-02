@@ -1,31 +1,18 @@
 package dev.ezpadaz.vanillaenhancer.Commands.Teleport;
 
-import dev.ezpadaz.vanillaenhancer.Commands.BaseCommand;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.Default;
+import co.aikar.commands.annotation.Description;
+import org.bukkit.entity.Player;
 
-import java.util.List;
 
-public class TPRechazarCommand {
-    public TPRechazarCommand() {
-        new BaseCommand("rechazar", 0, true) {
-
-            @Override
-            public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-                return null;
-            }
-
-            @Override
-            public boolean onCommand(CommandSender sender, String[] arguments) {
-                TeleportCommander commander = TeleportCommander.getInstance();
-                commander.removePlayerRequest(sender.getName(), false);
-                return true;
-            }
-
-            @Override
-            public String getUsage() {
-                return "/rechazar [Rechaza la solicitud de viaje pendiente (si existe)]";
-            }
-        };
+@CommandAlias("rechazar|reject|no")
+@Description("Rechaza la peticion de otro jugador de viaje hacia ti o tu hacia el.")
+public class TPRechazarCommand extends BaseCommand {
+    @Default
+    public void onTripReject(Player jugador){
+        TeleportCommander commander = TeleportCommander.getInstance();
+        commander.removePlayerRequest(jugador.getName(), false);
     }
 }

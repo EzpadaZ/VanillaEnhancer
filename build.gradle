@@ -4,13 +4,12 @@ plugins {
 }
 
 group = 'dev.ezpadaz'
-version = '1.0.4'
+version = '1.1.0'
 
 repositories {
     mavenCentral()
-    maven {
-        name = "spigotmc-repo"
-        url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+    maven{
+        url = "https://repo.papermc.io/repository/maven-public/"
     }
     maven {
         name = "sonatype"
@@ -32,7 +31,7 @@ shadowJar {
 }
 
 dependencies {
-    compileOnly "org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT"
+    compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
     compileOnly 'com.github.Archy-X:AureliumSkills:Beta1.3.21'
     implementation fileTree(dir: 'libs', include: '*.jar')
 }

@@ -1,71 +1,67 @@
 package dev.ezpadaz.vanillaenhancer.Commands.Teleport;
 
-import dev.ezpadaz.vanillaenhancer.Commands.BaseCommand;
-import dev.ezpadaz.vanillaenhancer.Utils.GeneralUtils;
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.Default;
+import co.aikar.commands.annotation.Description;
+import co.aikar.commands.annotation.Subcommand;
 import dev.ezpadaz.vanillaenhancer.Utils.InventoryHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.List;
+import java.text.DecimalFormat;
 
-public class TPRegresarCommand {
-    public TPRegresarCommand() {
-        new BaseCommand("regresar", 0, true) {
-            @Override
-            public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-                return null;
+@CommandAlias("regresar|back")
+@Description("Te regresa a la ubicacion anterior de un viaje.")
+public class TPRegresarCommand extends BaseCommand {
+
+    @Default
+    public void onComebackTrip(Player jugador) {
+        TeleportCommander commander = TeleportCommander.getInstance();
+        Location ubicacion = commander.getPreviousLocation(jugador.getName());
+
+        if (ubicacion != null) {
+            // We have an available location to get back to.
+            if (InventoryHelper.hasItem(jugador, commander.MATERIAL_TYPE, commander.TRAVEL_BACK_MATERIAL_COST)) {
+                commander.unsafeTeleportPlayer(jugador, ubicacion, commander.TELEPORT_DELAY);
+                commander.removeLastLocation(jugador.getName());
+                new InventoryHelper().removeItems(jugador, commander.MATERIAL_TYPE, commander.TRAVEL_BACK_MATERIAL_COST);
+            } else {
+                MessageHelper.send(jugador, "&cNo tienes como pagar culero.");
             }
+        } else {
+            MessageHelper.send(jugador, "&cNo tienes a donde volver.");
+        }
+    }
 
-            @Override
-            public boolean onCommand(CommandSender sender, String[] arguments) {
-                TeleportCommander commander = TeleportCommander.getInstance();
-                Player jugador = GeneralUtils.getPlayer(sender.getName());
-                String subcmd;
-                if (arguments != null && arguments.length > 0) {
-                    subcmd = arguments[0];
-                } else {
-                    subcmd = "";
-                }
+    @Subcommand("cancelar|c")
+    @Description("Cancela el retorno que tienes activo.")
+    public void onComebackCancel(Player jugador) {
+        TeleportCommander commander = TeleportCommander.getInstance();
+        Location ubicacion = commander.getPreviousLocation(jugador.getName());
 
-                switch (subcmd) {
-                    case "cancelar":
-                        if(commander.getPreviousLocation(sender.getName()) != null){
-                            if(jugador != null){
-                                commander.removeLastLocation(sender.getName());
-                                MessageHelper.send(jugador, "&6He cancelado tu ultima ubicacion.");
-                            }
-                        }else{
-                            if(jugador != null){
+        if (ubicacion != null) {
+            commander.removeLastLocation(jugador.getName());
+            MessageHelper.send(jugador, "&6He cancelado tu ultima ubicacion :p");
+        } else {
+            MessageHelper.send(jugador, "&cNo hay nada que cancelar.");
+        }
+    }
 
-                                MessageHelper.send(jugador, "&cNo hay nada que cancelar :v.");
-                            }
-                        }
-                        return true;
-                    default:
-                        if (commander.getPreviousLocation(sender.getName()) != null) {
-                            if (jugador != null) {
-                                if (InventoryHelper.hasItem(jugador, commander.MATERIAL_TYPE, commander.TRAVEL_BACK_MATERIAL_COST)) {
-                                    commander.unsafeTeleportPlayer(jugador, commander.getPreviousLocation(sender.getName()), commander.TELEPORT_DELAY);
-                                    commander.removeLastLocation(sender.getName());
-                                    new InventoryHelper().removeItems(jugador, commander.MATERIAL_TYPE, (commander.TRAVEL_BACK_MATERIAL_COST));
-                                } else {
-                                    // no tiene, informarle amablemente que no tiene oro.
-                                    MessageHelper.send(jugador, "&cNo me quieras ver la cara de pendejo, no tienes oro.");
-                                }
-                            }
-                        } else {
-                            MessageHelper.send(jugador, "&cNo tienes un lugar a donde volver");
-                        }
-                        return true;
-                }
-            }
-
-            @Override
-            public String getUsage() {
-                return "/regresar  [Te regresa a tu ubicacion previa (de viaje)]";
-            }
-        };
+    @Subcommand("donde|d")
+    @Description("Te muestra las coordenadas del lugar a donde regresarias")
+    public void onComebackWhereTo(Player jugador) {
+        TeleportCommander commander = TeleportCommander.getInstance();
+        Location ubicacion = commander.getPreviousLocation(jugador.getName());
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        if (ubicacion != null) {
+            MessageHelper.send(jugador, "&6Tu ultima ubicacion es: &a[&6X: &c%s&6, &6Y: &c%s&6, &6Z: &c%s&a]".formatted(
+                    Double.parseDouble(decimalFormat.format(ubicacion.getX())),
+                    Double.parseDouble(decimalFormat.format(ubicacion.getY())),
+                    Double.parseDouble(decimalFormat.format(ubicacion.getZ()))));
+        } else {
+            MessageHelper.send(jugador, "&cNo tienes una ubicacion para mostrar");
+        }
     }
 }

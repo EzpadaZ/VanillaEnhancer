@@ -14,17 +14,17 @@ public class DependencyHelper {
 
         if(pm.getPlugin("ReviveMe") != null){
             hasReviveMe = true;
-            MessageHelper.console("ReviveMe detected, enabled support for it.");
+            MessageHelper.console("&6ReviveMe: &a[DETECTED]");
         }
 
         if(pm.getPlugin("PlaceholderAPI") != null){
             hasPlaceholderApi = true;
-            MessageHelper.console("PlaceholderAPI detected, enabled support for it.");
+            MessageHelper.console("&PlaceholderAPI: &a[DETECTED]");
         }
 
         if(pm.getPlugin("AureliumSkills") != null){
             hasAureliumSkills = true;
-            MessageHelper.console("AureliumSkills detected, enabled support for it.");
+            MessageHelper.console("&6AureliumSkills: &a[DETECTED]");
         }
     }
 
