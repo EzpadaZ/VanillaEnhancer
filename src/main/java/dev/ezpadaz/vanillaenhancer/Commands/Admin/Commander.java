@@ -13,9 +13,11 @@ import org.bukkit.entity.Player;
 @Description("VE Commander Panel")
 public class Commander extends BaseCommand {
 
-    @Subcommand("settings")
+    @Subcommand("settings|s")
     @Description("Settings Commander")
     public class SettingsCommander extends BaseCommand {
+
+        @Subcommand("reload|r")
         public void settingsReload(Player jugador) {
             if (jugador.isOp()) {
                 SettingsHelper.getInstance().clearSettingCache();
