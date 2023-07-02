@@ -1,5 +1,6 @@
 package dev.ezpadaz.vanillaenhancer.Utils;
 
+import dev.ezpadaz.vanillaenhancer.Utils.Database.Model.Config.ConfigurationModel;
 import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -22,7 +23,8 @@ public class MessageHelper {
     }
 
     public static void consoleDebug(String message) {
-        boolean isDebugEnabled = VanillaEnhancer.getInstance().config.getBoolean("debug");
+        ConfigurationModel settings = SettingsHelper.getInstance().getSettings();
+        boolean isDebugEnabled = settings.getDebugMode();
 
         if (isDebugEnabled) console(message);
     }

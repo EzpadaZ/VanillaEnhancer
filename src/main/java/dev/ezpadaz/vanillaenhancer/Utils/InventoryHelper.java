@@ -20,12 +20,7 @@ public class InventoryHelper {
     // Return true if player has X amount of item in inventory.
     public static boolean hasItem(Player jugador, Material type, int amount) {
         if (jugador == null) return false;
-
-        boolean found = jugador.getInventory().contains(type, amount);
-        if (found) {
-            MessageHelper.consoleDebug("Found " + type + " in " + jugador.getName() + " inventory.");
-        }
-        return found;
+        return jugador.getInventory().contains(type, amount);
     }
 
     public static void removeSpecificItem(Player jugador, ItemStack item){

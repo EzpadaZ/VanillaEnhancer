@@ -8,6 +8,7 @@ public class ConfigurationModel {
 
     // dxp settings
     private int dxp_multiplier = 2;
+    private int dxp_death_cooldown = 3;
     private boolean dxp_enabled = true;
     private boolean dxp_aurelium_enabled = true;
 
@@ -43,6 +44,9 @@ public class ConfigurationModel {
 
     public int getDxp_multiplier() {
         return dxp_multiplier;
+    }
+    public int getDxp_death_cooldown() {
+        return dxp_death_cooldown;
     }
 
     private boolean getDxp_enabled() {
@@ -103,6 +107,7 @@ public class ConfigurationModel {
     public ConfigurationModel(
             boolean debugMode,
             int dxp_multiplier,
+            int dxp_death_cooldown,
             boolean dxp_enabled,
             boolean dxp_aurelium_enabled,
             boolean tp_enabled,
@@ -121,6 +126,7 @@ public class ConfigurationModel {
         // this modifies values.
         this.debugMode = debugMode;
         this.dxp_multiplier = dxp_multiplier;
+        this.dxp_death_cooldown = dxp_death_cooldown;
         this.dxp_enabled = dxp_enabled;
         this.dxp_aurelium_enabled = dxp_aurelium_enabled;
         this.tp_enabled = tp_enabled;
@@ -157,6 +163,7 @@ public class ConfigurationModel {
         ConfigurationModel temp = new ConfigurationModel(
                 debugMode = document.getBoolean("debug", true),
                 dxp_multiplier = dxp.getInteger("multiplier", 2),
+                dxp_death_cooldown = dxp.getInteger("death_cooldown", 3),
                 dxp_enabled = dxp.getBoolean("enabled", true),
                 dxp_aurelium_enabled = dxp.getBoolean("aurelium_enabled", true),
                 tp_enabled = tp.getBoolean("enabled", true),
@@ -193,17 +200,16 @@ public class ConfigurationModel {
 
     public Document getDocumentFormat() {
         Document settings = new Document("debug", getDebugMode());
-
         settings.append("double-xp", getDefaultDXPSettings());
         settings.append("tp", getDefaultTPSettings());
         settings.append("overseer", getDefaultOverseerSettings());
         settings.append("enhancements", getDefaultEnhancementsSettings());
-
         return settings;
     }
 
     Document getDefaultDXPSettings() {
         Document dxp = new Document("multiplier", getDxp_multiplier());
+        dxp.append("death_cooldown", getDxp_death_cooldown());
         dxp.append("aurelium_enabled", getDxp_aurelium_enabled());
         dxp.append("enabled", getDxp_enabled());
         return dxp;

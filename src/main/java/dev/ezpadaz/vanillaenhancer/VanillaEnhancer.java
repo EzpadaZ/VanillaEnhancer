@@ -1,7 +1,5 @@
 package dev.ezpadaz.vanillaenhancer;
 
-
-import co.aikar.commands.BukkitCommandManager;
 import co.aikar.commands.PaperCommandManager;
 import dev.ezpadaz.vanillaenhancer.Commands.CommandBootloader;
 import dev.ezpadaz.vanillaenhancer.Commands.Teleport.TeleportCommander;
@@ -28,10 +26,10 @@ public final class VanillaEnhancer extends JavaPlugin {
         // Plugin startup logic
         saveDefaultConfig();
         instance = this;
+        Database.getInstance().init();
         manager = new PaperCommandManager(instance);
 
         MessageHelper.console("&6Command Manager: &a[OK]");
-        Database.getInstance().init();
         DependencyHelper.checkDependencies();
         // Command Bootloader
         new CommandBootloader();

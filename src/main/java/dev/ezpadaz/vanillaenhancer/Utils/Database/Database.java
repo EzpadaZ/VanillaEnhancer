@@ -4,7 +4,10 @@ import com.mongodb.client.*;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.SettingsHelper;
 import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -42,20 +45,26 @@ public class Database {
             database = client.getDatabase("minecraft");
             MessageHelper.console("&6Connected to: &c" + connectionString);
             SettingsHelper.getInstance().setupConfig();
-        } catch (Exception e) {
-            MessageHelper.console("&cWe fucking died trying to connect to MongoDB.");
-            MessageHelper.console("&c"+e.getMessage());
+        } catch (Error e) {
+            PluginManager pm = Bukkit.getPluginManager();
+            Plugin self = pm.getPlugin("VanillaEnhancer");
+
+            if (self != null) {
+                MessageHelper.console("&cWe fucking died trying to connect to MongoDB.");
+                MessageHelper.console("&c"+e.getMessage());
+                pm.disablePlugin(self);
+            }
         }
     }
 
-    public MongoCollection getCollection(String collection){
+    public MongoCollection getCollection(String collection) {
         return database.getCollection(collection);
     }
 
     public void close() {
-        try{
+        try {
             client.close();
-        }catch(Exception e){
+        } catch (Exception e) {
             // do nothing.
         }
     }

@@ -1,11 +1,1 @@
-debug: true
-
-config:
-  revive-cost: 32
-  tp-cost: 8
-  tp-cooldown: 60
-
-double-xp:
-  log: true
-  multiplier: 2
-  death-cooldown: 3
+mongodb: mongodb://localhost:27017/minecraft

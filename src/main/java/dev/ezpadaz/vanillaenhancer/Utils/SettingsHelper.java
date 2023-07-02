@@ -7,6 +7,8 @@ import org.bson.Document;
 
 public class SettingsHelper {
     private MongoCollection collection;
+    private ConfigurationModel cachedSettings;
+    private Long lastUpdateTime;
     private static SettingsHelper instance;
 
     private SettingsHelper() {
@@ -28,8 +30,17 @@ public class SettingsHelper {
     }
 
     public ConfigurationModel getSettings() {
-        Document config = (Document) collection.find().first();
-        return new ConfigurationModel().getFromDocument(config);
+        long currentTime = System.currentTimeMillis();
+        if (cachedSettings == null || lastUpdateTime == null || currentTime - lastUpdateTime >= 10 * 60 * 1000) {
+            Document config = (Document) collection.find().first();
+            cachedSettings = new ConfigurationModel().getFromDocument(config);
+            lastUpdateTime = currentTime;
+        }
+        return cachedSettings;
+    }
+
+    public void clearSettingCache() {
+        lastUpdateTime = null;
     }
 
     public static SettingsHelper getInstance() {
