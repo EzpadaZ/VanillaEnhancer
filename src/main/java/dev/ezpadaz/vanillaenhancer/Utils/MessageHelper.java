@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class MessageHelper {
+    private static String PREFIX = "&6[&5VE&6]&f ";
     public static void send(CommandSender sender, String message) {
         send(sender, message, "&6[&5VE&6]&f ");
     }
@@ -20,6 +21,12 @@ public class MessageHelper {
         String translatedMessage = ChatColor.translateAlternateColorCodes('&', prefix + message);
         Component component = Component.text(translatedMessage).color(NamedTextColor.WHITE);
         sender.sendMessage(component);
+
+    }
+
+    public static void sendConsole(String message){
+        String translatedMessage = ChatColor.translateAlternateColorCodes('&', PREFIX + message);
+        VanillaEnhancer.getInstance().getServer().getConsoleSender().sendMessage(translatedMessage);
     }
 
     public static void sendMultipleMessage(CommandSender sender, String titleText, String tagText, List<String> strings) {
@@ -85,6 +92,7 @@ public class MessageHelper {
     }
 
     public static void console(String message) {
-        send(VanillaEnhancer.getInstance().getServer().getConsoleSender(), "&6[&5VE&6]&f " + message, "&a");
+        //send(VanillaEnhancer.getInstance().getServer().getConsoleSender(), "&6[&5VE&6]&f " + message, "&a");
+        sendConsole(message);
     }
 }
