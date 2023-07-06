@@ -7,7 +7,7 @@ import dev.ezpadaz.vanillaenhancer.Listeners.ListenerBootloader;
 import dev.ezpadaz.vanillaenhancer.Utils.Database.Database;
 import dev.ezpadaz.vanillaenhancer.Utils.DependencyHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
-import dev.ezpadaz.vanillaenhancer.Utils.Overseer.Overseer;
+import dev.ezpadaz.vanillaenhancer.Utils.Watcher.Watcher;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -28,8 +28,6 @@ public final class VanillaEnhancer extends JavaPlugin {
         instance = this;
         Database.getInstance().init();
         manager = new PaperCommandManager(instance);
-
-        MessageHelper.console("&6Command Manager: &a[OK]");
         DependencyHelper.checkDependencies();
         // Command Bootloader
         new CommandBootloader();
@@ -38,18 +36,19 @@ public final class VanillaEnhancer extends JavaPlugin {
         new ListenerBootloader();
 
         // Database.
+        MessageHelper.console("&6Command Manager: &a[OK]");
         MessageHelper.console("&6Running on: &c" + getServer().getVersion());
         MessageHelper.console("&6Plugin Version: &c" + getDescription().getVersion());
         MessageHelper.console("&6Plugin Status: &a[OK]");
 
         // The TPS Guardian.
-        Overseer.getInstance().init();
+        Watcher.getInstance().init();
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        Overseer.getInstance().stopOverseer();
+        Watcher.getInstance().stopWatcher();
         TeleportCommander.getInstance().cancelAllActiveTasks();
         MessageHelper.console("&6Plugin status: &cDisabled");
     }

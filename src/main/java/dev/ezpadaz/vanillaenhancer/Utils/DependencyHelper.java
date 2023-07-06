@@ -19,7 +19,7 @@ public class DependencyHelper {
 
         if(pm.getPlugin("PlaceholderAPI") != null){
             hasPlaceholderApi = true;
-            MessageHelper.console("&PlaceholderAPI: &a[DETECTED]");
+            MessageHelper.console("&6PlaceholderAPI: &a[DETECTED]");
         }
 
         if(pm.getPlugin("AureliumSkills") != null){

@@ -27,15 +27,18 @@ public class ConfigurationModel {
     private boolean infinity = true;
     private boolean cb_fix = true;
 
+    private boolean cart_enabled = true;
+    private double cart_speed = 2.5;
+
+
     // overseer settings
-    private boolean overseer_enabled = true;
+    private boolean watcher_enabled = true;
     private double warning_tps = 18.0;
     private double min_tps = 17.5;
-    private int overseer_interval = 30;
+    private int watcher_interval = 30;
 
-
-    public int getOverseer_interval() {
-        return overseer_interval;
+    public int getWatcher_interval() {
+        return watcher_interval;
     }
 
     public boolean getDebugMode() {
@@ -45,6 +48,7 @@ public class ConfigurationModel {
     public int getDxp_multiplier() {
         return dxp_multiplier;
     }
+
     public int getDxp_death_cooldown() {
         return dxp_death_cooldown;
     }
@@ -65,7 +69,9 @@ public class ConfigurationModel {
         return tp_threshold;
     }
 
-    public String getTp_material_name() { return tp_material_name; }
+    public String getTp_material_name() {
+        return tp_material_name;
+    }
 
     public int getTp_delay() {
         return tp_delay;
@@ -87,8 +93,8 @@ public class ConfigurationModel {
         return cb_fix;
     }
 
-    public boolean getOverseer_enabled() {
-        return overseer_enabled;
+    public boolean getWatcher_enabled() {
+        return watcher_enabled;
     }
 
     public double getWarning_tps() {
@@ -97,6 +103,14 @@ public class ConfigurationModel {
 
     public double getMin_tps() {
         return min_tps;
+    }
+
+    public boolean getCart_enabled() {
+        return cart_enabled;
+    }
+
+    public double getCart_speed() {
+        return cart_speed;
     }
 
 
@@ -118,8 +132,10 @@ public class ConfigurationModel {
             int tp_cost,
             boolean infinity,
             boolean cb_fix,
-            boolean overseer_enabled,
-            int overseer_interval,
+            boolean cart_enabled,
+            double cart_speed,
+            boolean watcher_enabled,
+            int watcher_interval,
             double warning_tps,
             double min_tps
     ) {
@@ -137,16 +153,10 @@ public class ConfigurationModel {
         this.tp_cost = tp_cost;
         this.infinity = infinity;
         this.cb_fix = cb_fix;
-        this.overseer_enabled = overseer_enabled;
+        this.watcher_enabled = watcher_enabled;
         this.warning_tps = warning_tps;
         this.min_tps = min_tps;
     }
-
-    // HOW TO ADD A NEW SETTING
-    // ADD IT ABOVE AS A VALUE
-    // ADD IT TO THE CONSTRUCTOR
-    // ADD IT TO ITS RESPECTIVE getDefaultXXXXSetting() METHOD.
-    // PARSE IT TO THE CONSTRUCTOR FROM THE  getFromDocument METHOD (APPLYING A DEFAULT VALUE IF IT NOT FOUND THE FIRST TIME.)
 
     public ConfigurationModel getFromDocument(Document document) {
         if (document == null) {
@@ -157,7 +167,7 @@ public class ConfigurationModel {
         Document dxp = document.get("double-xp", Document.class) != null ? document.get("double-xp", Document.class) : getDefaultDXPSettings();
         Document tp = document.get("tp", Document.class) != null ? document.get("tp", Document.class) : getDefaultTPSettings();
         Document enhancements = document.get("enhancements", Document.class) != null ? document.get("enhancements", Document.class) : getDefaultEnhancementsSettings();
-        Document overseer = document.get("overseer", Document.class) != null ? document.get("overseer", Document.class) : getDefaultOverseerSettings();
+        Document watcher = document.get("watcher", Document.class) != null ? document.get("watcher", Document.class) : getDefaultWatcherSettings();
 
         // Yes, parameters even after they are ASSIGNED, need to be in order.
         ConfigurationModel temp = new ConfigurationModel(
@@ -174,10 +184,12 @@ public class ConfigurationModel {
                 tp_cost = tp.getInteger("cost", 4),
                 infinity = enhancements.getBoolean("infinity", true),
                 cb_fix = enhancements.getBoolean("cb_fix", true),
-                overseer_enabled = overseer.getBoolean("enabled", true),
-                overseer_interval = overseer.getInteger("interval", 30),
-                warning_tps = getDoubleOrDefault(overseer, "warning_tps", 18.0),
-                min_tps = getDoubleOrDefault(overseer, "min_tps", 17.5)
+                cart_enabled = enhancements.getBoolean("cart_enabled", true),
+                cart_speed = getDoubleOrDefault(enhancements, "cart_speed", 2.0),
+                watcher_enabled = watcher.getBoolean("enabled", true),
+                watcher_interval = watcher.getInteger("interval", 30),
+                warning_tps = getDoubleOrDefault(watcher, "warning_tps", 18.0),
+                min_tps = getDoubleOrDefault(watcher, "min_tps", 17.5)
         );
         return temp;
     }
@@ -202,7 +214,7 @@ public class ConfigurationModel {
         Document settings = new Document("debug", getDebugMode());
         settings.append("double-xp", getDefaultDXPSettings());
         settings.append("tp", getDefaultTPSettings());
-        settings.append("overseer", getDefaultOverseerSettings());
+        settings.append("watcher", getDefaultWatcherSettings());
         settings.append("enhancements", getDefaultEnhancementsSettings());
         return settings;
     }
@@ -228,16 +240,17 @@ public class ConfigurationModel {
     Document getDefaultEnhancementsSettings() {
         Document enhancements = new Document("infinity", getInfinity());
         enhancements.append("cb_fix", getCb_fix());
+        enhancements.append("cart_enabled", getCart_enabled());
+        enhancements.append("cart_speed", getCart_speed());
         return enhancements;
     }
 
-    Document getDefaultOverseerSettings() {
-        Document overseer = new Document("enabled", getOverseer_enabled());
+    Document getDefaultWatcherSettings() {
+        Document overseer = new Document("enabled", getWatcher_enabled());
         overseer.append("warning_tps", getWarning_tps());
         overseer.append("min_tps", getMin_tps());
-        overseer.append("interval", getOverseer_interval());
+        overseer.append("interval", getWatcher_interval());
         return overseer;
     }
-
 
 }

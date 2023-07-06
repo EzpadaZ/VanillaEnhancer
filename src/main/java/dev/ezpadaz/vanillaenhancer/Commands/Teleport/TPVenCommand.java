@@ -6,6 +6,8 @@ import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 
 @CommandAlias("ven|traer")
 @Description("Trae a un jugador a tu ubicacion.")
@@ -43,13 +45,17 @@ public class TPVenCommand extends BaseCommand {
         }
 
         commander.addPlayerRequest(target.getName(), new TeleportDAO(origen.getName(), target.getName(), false));
-        String peticionText = "&c%s &6quiere que vayas hacia su ubicacion, escribe &a/aceptar&6/&a/si&6/&a/a&6 en los siguientes &c%s segundos &6para autorizar esta peticion.".formatted(origen.getName(), commander.REQUEST_TIMEOUT);
-        MessageHelper.send(target, peticionText);
-        MessageHelper.send(origen, "&6Solicitud enviada!\n\nEsto tendra un costo de: &c%s &3%s &6cuando &c%s &6acepte el proceso.".formatted(commander.MATERIAL_COST, commander.MATERIAL_NAME, target.getName()));
-    }
 
-    @Subcommand("cancelar|c")
-    public void onTripCancel(Player origen) {
-        TeleportCommander.getInstance().cancelTrip(origen.getName());
+
+        MessageHelper.sendMultipleMessage(target, "&aUver", "INFO", List.of(new String[]{
+                "&6" + origen.getName() + " quiere llevarte hacia el.",
+                "Escribe &a/aceptar &6/ &a/si &6/ &a/a &6 en los siguientes &c" + commander.REQUEST_TIMEOUT + " segundos &6para autorizar esta peticion.",
+                "Escribe &c/no &6o &c/rechazar &6para mandarlo &calv"
+        }));
+
+        MessageHelper.sendMultipleMessage(origen, "Uber", "INFO", List.of(new String[]{
+                "&6Solicitud enviada",
+                "&6Tendra un costo de: &c" + commander.MATERIAL_COST + " &3" + commander.MATERIAL_NAME,
+        }));
     }
 }

@@ -1,14 +1,19 @@
 package dev.ezpadaz.vanillaenhancer.Utils;
 
+import dev.ezpadaz.vanillaenhancer.Utils.Database.Model.Config.ConfigurationModel;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.ChiseledBookshelf;
+import org.bukkit.block.data.type.RedstoneRail;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.inventory.ChiseledBookshelfInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -46,6 +51,26 @@ public class GameplayEnhancer {
                     ItemStack returnedItem = inventory.getItem(bslot);
                     inventory.removeItem(returnedItem);
                     jugador.getInventory().addItem(returnedItem);
+                }
+            }
+        }
+    }
+
+    public static void cartSpeedIncrease(VehicleMoveEvent event) {
+        ConfigurationModel settings = SettingsHelper.getInstance().getSettings();
+        double METERS_PER_TICK = 0.4d;
+        if (settings.getCart_enabled()) {
+            if (event.getVehicle() instanceof Minecart) {
+                Minecart cart = (Minecart) event.getVehicle();
+                Block rail = cart.getLocation().getBlock();
+                Block under = rail.getRelative(BlockFace.DOWN);
+
+                if (rail.getType() == Material.POWERED_RAIL) {
+                    if (under.getType() == Material.OBSIDIAN) {
+                        cart.setMaxSpeed(METERS_PER_TICK);
+                    } else {
+                        cart.setMaxSpeed(METERS_PER_TICK * settings.getCart_speed());
+                    }
                 }
             }
         }

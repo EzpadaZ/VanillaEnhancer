@@ -171,7 +171,7 @@ public class TeleportCommander {
                 target.teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN);
                 EffectHelper.getInstance().strikeLightning(target);
                 MessageHelper.send(target, "&6Peticion aceptada con exito!.");
-                MessageHelper.send(origin, "&c%s &6acepto tu peticion, he retirado el oro de tu inventario".formatted(target.getName()));
+                MessageHelper.send(origin, "&c%s &6acepto tu peticion, he retirado el costo de tu inventario".formatted(target.getName()));
                 PlayerTelemetry.savePlayerTeleport(target, origin, destination);
             }, TELEPORT_DELAY);
         } else {

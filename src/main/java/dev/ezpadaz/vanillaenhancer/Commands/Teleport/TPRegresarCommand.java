@@ -35,20 +35,6 @@ public class TPRegresarCommand extends BaseCommand {
         }
     }
 
-    @Subcommand("cancelar|c")
-    @Description("Cancela el retorno que tienes activo.")
-    public void onComebackCancel(Player jugador) {
-        TeleportCommander commander = TeleportCommander.getInstance();
-        Location ubicacion = commander.getPreviousLocation(jugador.getName());
-
-        if (ubicacion != null) {
-            commander.removeLastLocation(jugador.getName());
-            MessageHelper.send(jugador, "&6He cancelado tu ultima ubicacion :p");
-        } else {
-            MessageHelper.send(jugador, "&cNo hay nada que cancelar.");
-        }
-    }
-
     @Subcommand("donde|d")
     @Description("Te muestra las coordenadas del lugar a donde regresarias")
     public void onComebackWhereTo(Player jugador) {
