@@ -25,9 +25,9 @@ public class SaludCommand extends BaseCommand {
 
         List<String> mensajes = new ArrayList<>();
         mensajes.add("Salud actual: &f" + GeneralUtils.formatDouble(vidaActual) + " - &6Vida Maxima: &f" + GeneralUtils.formatDouble(maxVida));
-        mensajes.add("Mana actual: &f" + currentMana);
-        mensajes.add("Saturacion actual: &f" + currentSaturation);
-        mensajes.add("Hambre actual: &f" + currentHunger);
+        mensajes.add("Mana actual: &f" + GeneralUtils.formatDouble(currentMana));
+        mensajes.add("Saturacion actual: &f" + GeneralUtils.formatDouble(currentSaturation));
+        mensajes.add("Hambre actual: &f" + GeneralUtils.formatDouble(currentHunger));
         MessageHelper.sendMultipleMessage(jugador, "&bInformacion que cura", "INFO", mensajes);
     }
 
