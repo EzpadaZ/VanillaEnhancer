@@ -2,6 +2,7 @@ package dev.ezpadaz.vanillaenhancer.Commands.DoubleXP.Helper;
 
 import com.archyx.aureliumskills.api.event.XpGainEvent;
 import dev.ezpadaz.vanillaenhancer.Utils.Database.Model.Config.ConfigurationModel;
+import dev.ezpadaz.vanillaenhancer.Utils.Database.Model.DoubleXP.DoubleXPModel;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.SettingsHelper;
 import org.bukkit.entity.Player;
@@ -15,7 +16,6 @@ import java.util.HashMap;
 public class XPEvent {
     public static boolean isEnabled = false;
 
-    public static ArrayList<String> optedInPlayers = new ArrayList<String>();
     public static ArrayList<String> bannedPlayers = new ArrayList<>();
 
     public static HashMap<String, Integer> doubleXpDeathCount = new HashMap<>();
@@ -30,12 +30,12 @@ public class XPEvent {
 
         if (isEnabled) {
             if (bannedPlayers.contains(jugador.getName())) {
-                if (optedInPlayers.contains(jugador.getName())) {
+                if (DoubleXPModel.getOptedPlayer(jugador.getName())) {
                     MessageHelper.send(jugador, "Has recibido: " + obtainedExp + " XP (Reducido)");
                 }
                 event.setAmount(obtainedExp);
             } else {
-                if (optedInPlayers.contains(jugador.getName())) {
+                if (DoubleXPModel.getOptedPlayer(jugador.getName())) {
                     MessageHelper.send(jugador, "Has recibido: " + doubleExp + " (" + obtainedExp + " x " + multiplier + ") XP");
                 }
                 event.setAmount(doubleExp);
@@ -43,7 +43,7 @@ public class XPEvent {
             return;
         }
 
-        if (optedInPlayers.contains(jugador.getName())) {
+        if (DoubleXPModel.getOptedPlayer(jugador.getName())) {
             MessageHelper.send(event.getPlayer(), "Has recibido: " + obtainedExp + " XP");
         }
         event.setAmount(obtainedExp);

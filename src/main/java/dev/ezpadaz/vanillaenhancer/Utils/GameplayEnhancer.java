@@ -38,7 +38,7 @@ public class GameplayEnhancer {
             ChiseledBookshelfInventory inventory = bookshelf.getInventory();
             if (item != null && item.getType() == Material.ENCHANTED_BOOK) {
                 // is a valid enchantment book, save it in the storage.
-                Vector pos = event.getClickedPosition();
+                Vector pos = event.getInteractionPoint().toVector();
                 int bslot = bookshelf.getSlot(pos); // gets chiseled_bookshelf looked at position.
                 ItemStack tempItem = inventory.getItem(bslot);
                 Player jugador = event.getPlayer();

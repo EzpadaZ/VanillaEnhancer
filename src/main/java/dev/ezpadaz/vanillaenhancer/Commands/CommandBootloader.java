@@ -6,15 +6,15 @@ import dev.ezpadaz.vanillaenhancer.Commands.DoubleXP.XPCommand;
 import dev.ezpadaz.vanillaenhancer.Commands.Misc.CancelarCommand;
 import dev.ezpadaz.vanillaenhancer.Commands.Misc.SaludCommand;
 import dev.ezpadaz.vanillaenhancer.Commands.Teleport.*;
+import dev.ezpadaz.vanillaenhancer.Utils.Database.Model.DoubleXP.DoubleXPModel;
 import dev.ezpadaz.vanillaenhancer.Utils.GeneralUtils;
 
 import java.util.List;
 
 public class CommandBootloader {
     public CommandBootloader() {
-
         GeneralUtils.registerCompleter("boolean", List.of(new String[]{"true", "false"}));
-
+        DoubleXPModel.refreshList();
         TeleportCommander.getInstance().setupCommander();
         GeneralUtils.registerCommand(new XPCommand());
         GeneralUtils.registerCommand(new TestCommand());
@@ -22,7 +22,5 @@ public class CommandBootloader {
         GeneralUtils.registerCommand(new TCCommand());
         GeneralUtils.registerCommand(new Commander());
         GeneralUtils.registerCommand(new SaludCommand());
-
-
     }
 }

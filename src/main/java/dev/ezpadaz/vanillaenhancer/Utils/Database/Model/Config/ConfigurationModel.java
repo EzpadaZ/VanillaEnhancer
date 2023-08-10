@@ -37,6 +37,13 @@ public class ConfigurationModel {
     private double min_tps = 17.5;
     private int watcher_interval = 30;
 
+    // auto-food
+    private boolean autofood_enabled = false;
+
+    public boolean getAutofood_enabled() {
+        return autofood_enabled;
+    }
+
     public int getWatcher_interval() {
         return watcher_interval;
     }
@@ -137,7 +144,8 @@ public class ConfigurationModel {
             boolean watcher_enabled,
             int watcher_interval,
             double warning_tps,
-            double min_tps
+            double min_tps,
+            boolean autofood_enabled
     ) {
         // this modifies values.
         this.debugMode = debugMode;
@@ -153,9 +161,13 @@ public class ConfigurationModel {
         this.tp_cost = tp_cost;
         this.infinity = infinity;
         this.cb_fix = cb_fix;
+        this.cart_enabled = cart_enabled;
+        this.cart_speed = cart_speed;
         this.watcher_enabled = watcher_enabled;
+        this.watcher_interval = watcher_interval;
         this.warning_tps = warning_tps;
         this.min_tps = min_tps;
+        this.autofood_enabled = autofood_enabled;
     }
 
     public ConfigurationModel getFromDocument(Document document) {
@@ -189,7 +201,8 @@ public class ConfigurationModel {
                 watcher_enabled = watcher.getBoolean("enabled", true),
                 watcher_interval = watcher.getInteger("interval", 30),
                 warning_tps = getDoubleOrDefault(watcher, "warning_tps", 18.0),
-                min_tps = getDoubleOrDefault(watcher, "min_tps", 17.5)
+                min_tps = getDoubleOrDefault(watcher, "min_tps", 17.5),
+                autofood_enabled = enhancements.getBoolean("auto_food", false)
         );
         return temp;
     }
@@ -242,6 +255,7 @@ public class ConfigurationModel {
         enhancements.append("cb_fix", getCb_fix());
         enhancements.append("cart_enabled", getCart_enabled());
         enhancements.append("cart_speed", getCart_speed());
+        enhancements.append("auto_food", getAutofood_enabled());
         return enhancements;
     }
 

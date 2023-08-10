@@ -5,6 +5,7 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.Subcommand;
 import dev.ezpadaz.vanillaenhancer.Commands.DoubleXP.Helper.XPEvent;
+import dev.ezpadaz.vanillaenhancer.Utils.Database.Model.DoubleXP.DoubleXPModel;
 import dev.ezpadaz.vanillaenhancer.Utils.ExperienceHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
 import org.bukkit.command.CommandSender;
@@ -70,22 +71,22 @@ public class XPCommand extends BaseCommand {
     @Subcommand("optin|oi")
     @Description("Te muestra cuanta experiencia ganas")
     public void onOptIn(Player jugador) {
-        if (XPEvent.optedInPlayers.contains(jugador.getName())) {
-            MessageHelper.send(jugador, "You are already receiving XP Updates");
+        if (DoubleXPModel.getOptedPlayer(jugador.getName())) {
+            MessageHelper.send(jugador, "Ya recibes esta informacion");
         } else {
-            XPEvent.optedInPlayers.add(jugador.getName());
-            MessageHelper.send(jugador, "You have opted-in to receive XP Updates");
+            DoubleXPModel.saveOptedPlayer(jugador.getName(), true);
+            MessageHelper.send(jugador, "Recibiras la informacion a partir de ahora.");
         }
     }
 
     @Subcommand("optout|ou")
     @Description("Deja de mostrarte cuanta experiancia ganas.")
     public void onOptOut(Player jugador) {
-        if (XPEvent.optedInPlayers.contains(jugador.getName())) {
-            XPEvent.optedInPlayers.remove(jugador.getName());
-            MessageHelper.send(jugador, "You have opted out of receiving XP Updates");
+        if (DoubleXPModel.getOptedPlayer(jugador.getName())) {
+            DoubleXPModel.saveOptedPlayer(jugador.getName(), false);
+            MessageHelper.send(jugador, "Dejaras de recibir esta informacion a partir de ahora.");
         } else {
-            MessageHelper.send(jugador, "You can't opt-out if you are not receiving updates already.");
+            MessageHelper.send(jugador, "No puedes dejar de recibir lo que no recibias.");
         }
     }
 

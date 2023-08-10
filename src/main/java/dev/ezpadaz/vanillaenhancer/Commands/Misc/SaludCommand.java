@@ -13,22 +13,15 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-@CommandAlias("salud")
+@CommandAlias("salud|health|gethealth")
 public class SaludCommand extends BaseCommand {
     @Default
     public void obtenerSalud(Player jugador) {
-        double vidaActual = jugador.getHealth(); //paper MC
-        double maxVida = jugador.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-        double currentMana = (DependencyHelper.hasAureliumSkills) ? AureliumAPI.getMana(jugador) : 0.0;
-        float currentSaturation = jugador.getSaturation();
-        int currentHunger = jugador.getFoodLevel();
-
         List<String> mensajes = new ArrayList<>();
-        mensajes.add("Salud actual: &f" + GeneralUtils.formatDouble(vidaActual) + " - &6Vida Maxima: &f" + GeneralUtils.formatDouble(maxVida));
-        mensajes.add("Mana actual: &f" + currentMana);
-        mensajes.add("Saturacion actual: &f" + currentSaturation);
-        mensajes.add("Hambre actual: &f" + currentHunger);
-        MessageHelper.sendMultipleMessage(jugador, "&bInformacion que cura", "INFO", mensajes);
+        mensajes.add("Salud: &f" + GeneralUtils.formatDouble(jugador.getHealth()) + " &6/&f " + GeneralUtils.formatDouble(jugador.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
+        mensajes.add("Mana: &f" + ((DependencyHelper.hasAureliumSkills) ? AureliumAPI.getMana(jugador) : 0.0));
+        mensajes.add("Saturacion: &f" + jugador.getSaturation());
+        mensajes.add("Hambre: &f" + jugador.getFoodLevel());
+        MessageHelper.sendMultipleMessage(jugador, "&bDatos de Jugador", "INFO", mensajes);
     }
-
 }

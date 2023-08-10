@@ -7,6 +7,8 @@ import co.aikar.commands.annotation.Subcommand;
 import dev.ezpadaz.vanillaenhancer.Utils.GeneralUtils;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
 import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
+import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
 @CommandAlias("os")

@@ -2,7 +2,6 @@ package dev.ezpadaz.vanillaenhancer.Listeners.Entity;
 
 import com.archyx.aureliumskills.api.event.XpGainEvent;
 import dev.ezpadaz.vanillaenhancer.Commands.DoubleXP.Helper.XPEvent;
-import dev.ezpadaz.vanillaenhancer.Utils.DependencyHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.GameplayEnhancer;
 import dev.ezpadaz.vanillaenhancer.Utils.Telemetry.PlayerTelemetry;
 import org.bukkit.event.EventHandler;
