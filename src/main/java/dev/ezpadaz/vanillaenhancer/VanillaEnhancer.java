@@ -28,10 +28,11 @@ public final class VanillaEnhancer extends JavaPlugin {
         instance = this;
         Database.getInstance().init();
         manager = new PaperCommandManager(instance);
-        DependencyHelper.checkDependencies();
+
         // Command Bootloader
         new CommandBootloader();
 
+        DependencyHelper.checkDependencies();
         // Listeners
         new ListenerBootloader();
 

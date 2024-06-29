@@ -3,7 +3,7 @@ package dev.ezpadaz.vanillaenhancer.Commands.Misc;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
-import com.archyx.aureliumskills.api.AureliumAPI;
+import dev.aurelium.auraskills.api.AuraSkillsApi;
 import dev.ezpadaz.vanillaenhancer.Utils.DependencyHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.GeneralUtils;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;
@@ -19,7 +19,7 @@ public class SaludCommand extends BaseCommand {
     public void obtenerSalud(Player jugador) {
         List<String> mensajes = new ArrayList<>();
         mensajes.add("Salud: &f" + GeneralUtils.formatDouble(jugador.getHealth()) + " &6/&f " + GeneralUtils.formatDouble(jugador.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
-        mensajes.add("Mana: &f" + ((DependencyHelper.hasAureliumSkills) ? AureliumAPI.getMana(jugador) : 0.0));
+        mensajes.add("Mana: &f" + ((DependencyHelper.hasAureliumSkills) ? AuraSkillsApi.get().getUserManager().getUser(jugador.getUniqueId()).getMana() : 0.0));
         mensajes.add("Saturacion: &f" + GeneralUtils.formatDouble(jugador.getSaturation()));
         mensajes.add("Hambre: &f" + jugador.getFoodLevel());
         MessageHelper.sendMultipleMessage(jugador, "&bDatos de Jugador", "INFO", mensajes);

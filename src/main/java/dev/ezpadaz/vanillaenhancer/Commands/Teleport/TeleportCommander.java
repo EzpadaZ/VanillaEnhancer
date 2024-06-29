@@ -55,7 +55,7 @@ public class TeleportCommander {
         ItemMeta itemMeta = itemStack.getItemMeta();
 
         if (itemMeta.hasDisplayName()) {
-            MATERIAL_NAME = itemMeta.getLocalizedName();
+            MATERIAL_NAME = String.valueOf(itemMeta.displayName());
         } else {
             MATERIAL_NAME = itemMeta.getDisplayName();
         }

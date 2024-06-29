@@ -1,6 +1,6 @@
 package dev.ezpadaz.vanillaenhancer.Commands.DoubleXP.Helper;
 
-import com.archyx.aureliumskills.api.event.XpGainEvent;
+import dev.aurelium.auraskills.api.event.skill.XpGainEvent;
 import dev.ezpadaz.vanillaenhancer.Utils.Database.Model.Config.ConfigurationModel;
 import dev.ezpadaz.vanillaenhancer.Utils.Database.Model.DoubleXP.DoubleXPModel;
 import dev.ezpadaz.vanillaenhancer.Utils.MessageHelper;

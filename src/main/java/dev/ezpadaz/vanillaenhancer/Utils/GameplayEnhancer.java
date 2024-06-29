@@ -59,17 +59,20 @@ public class GameplayEnhancer {
     public static void cartSpeedIncrease(VehicleMoveEvent event) {
         ConfigurationModel settings = SettingsHelper.getInstance().getSettings();
         double METERS_PER_TICK = 0.4d;
+        double MAX_METERS_PER_TICK = METERS_PER_TICK * settings.getCart_speed();
         if (settings.getCart_enabled()) {
             if (event.getVehicle() instanceof Minecart) {
                 Minecart cart = (Minecart) event.getVehicle();
                 Block rail = cart.getLocation().getBlock();
                 Block under = rail.getRelative(BlockFace.DOWN);
 
-                if (rail.getType() == Material.POWERED_RAIL) {
+                if (rail.getType() == Material.POWERED_RAIL || rail.getType() == Material.RAIL) {
                     if (under.getType() == Material.OBSIDIAN) {
+                        // return cart to regular max speed.
                         cart.setMaxSpeed(METERS_PER_TICK);
-                    } else {
-                        cart.setMaxSpeed(METERS_PER_TICK * settings.getCart_speed());
+                    } else if (under.getType() == Material.REDSTONE_BLOCK) {
+                        cart.setVelocity(cart.getVelocity().multiply(settings.getCart_speed()));
+                        cart.setMaxSpeed(MAX_METERS_PER_TICK);
                     }
                 }
             }
@@ -80,11 +83,11 @@ public class GameplayEnhancer {
         Map<Enchantment, Integer> bowEnchants = Objects.requireNonNull(event.getBow()).getEnchantments();
         Entity shooter = event.getEntity();
 
-        if (shooter instanceof Player jugador) {
-            if (bowEnchants.containsKey(Enchantment.ARROW_INFINITE)) {
-                event.setConsumeItem(false);
-                jugador.updateInventory();
-            }
-        }
+//        if (shooter instanceof Player jugador) {
+//            if (bowEnchants.containsKey(Enchantment.INFINITY)) {
+//                event.setConsumeArrow(false);
+//                jugador.updateInventory();
+//            }
+//        }
     }
 }

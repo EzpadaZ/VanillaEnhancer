@@ -22,7 +22,7 @@ public class DependencyHelper {
             MessageHelper.console("&6PlaceholderAPI: &a[DETECTED]");
         }
 
-        if(pm.getPlugin("AureliumSkills") != null){
+        if(pm.getPlugin("AuraSkills") != null){
             hasAureliumSkills = true;
             MessageHelper.console("&6AureliumSkills: &a[DETECTED]");
         }
