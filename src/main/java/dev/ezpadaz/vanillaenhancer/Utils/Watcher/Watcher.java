@@ -13,6 +13,7 @@ import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -160,7 +161,8 @@ public class Watcher {
     }
 
     public void attemptChunkUnloading() {
-        Chunk[] loadedChunks = Bukkit.getServer().getWorld("fauno").getLoadedChunks();
+        World world = VanillaEnhancer.getInstance().getServer().getWorlds().get(0);
+        Chunk[] loadedChunks = world.getLoadedChunks();
         int ldc = loadedChunks.length;
         UNLOADED_CHUNKS = 0;
         for (Chunk chunk : loadedChunks) {

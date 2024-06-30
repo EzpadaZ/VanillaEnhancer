@@ -4,11 +4,14 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Description;
+import dev.ezpadaz.vanillaenhancer.Utils.Telemetry.PlayerTelemetry;
 import org.bukkit.entity.Player;
 
 @CommandAlias("test|ts")
 @Description("Function Test Command")
 public class TestCommand extends BaseCommand {
     @Default
-    public void test(Player jugador, String[] args){}
+    public void test(Player jugador, String[] args) {
+        PlayerTelemetry.savePlayerSession(jugador);
+    }
 }

@@ -43,6 +43,17 @@ public class PlayerModel {
         this.inventoryJson = GeneralUtils.getObjectJson(InventoryHelper.playerInventoryToBase64(jugador.getInventory()));
     }
 
+    public PlayerModel(Document doc) {
+        this.id = doc.getString("_id");
+        this.name = doc.getString("name");
+        this.currentlyOnline = doc.getBoolean("currentlyOnline");
+        this.lastSeen = doc.getDate("lastSeen");
+        this.lastKnownLocation = doc.getString("lastKnownLocation");
+        this.expPoints = doc.getString("expPoints");
+        this.address = doc.getString("address");
+        this.inventoryJson = doc.getString("inventoryJson");
+    }
+
     public PlayerModel(Player jugador, boolean isOnline) {
         this.id = jugador.getUniqueId().toString();
         this.name = jugador.getName();
@@ -92,5 +103,9 @@ public class PlayerModel {
 
     public String getInventoryJson() {
         return inventoryJson;
+    }
+
+    public Boolean getCurrentlyOnline() {
+        return currentlyOnline;
     }
 }

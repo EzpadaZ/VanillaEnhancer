@@ -10,6 +10,7 @@ import dev.ezpadaz.vanillaenhancer.Utils.SettingsHelper;
 import dev.ezpadaz.vanillaenhancer.Utils.Watcher.Watcher;
 import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -43,9 +44,10 @@ public class WatcherCommander extends BaseCommand {
     @Subcommand("status")
     public void osStatus(Player jugador) {
         double[] tps = VanillaEnhancer.getInstance().getServer().getTPS();
+        World world = VanillaEnhancer.getInstance().getServer().getWorlds().get(0);
         String state = SettingsHelper.getInstance().getSettings().getWatcher_enabled() ? "&aENABLED" : "&cDEAD";
         String tid = Watcher.getInstance().getTaskID() == null ? "DEAD" : Integer.toString(Watcher.getInstance().getTaskID());
-        int numChuksLoaded = (Bukkit.getWorld("fauno") != null) ? Bukkit.getWorld("fauno").getLoadedChunks().length : 0;
+        int numChuksLoaded = world.getLoadedChunks().length;
         double t1 = GeneralUtils.formatDouble(tps[0]);
         double t2 = GeneralUtils.formatDouble(tps[1]);
         List<String> strings = new ArrayList<>();

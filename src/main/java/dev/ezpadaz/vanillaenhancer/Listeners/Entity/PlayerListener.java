@@ -18,8 +18,9 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerDisconnect(PlayerQuitEvent event) {
-        // player joined the server.
-        PlayerTelemetry.savePlayerData(event.getPlayer(), false);
+        // player exited the server.
+        PlayerTelemetry.savePlayerSession(event.getPlayer()); // save session
+        PlayerTelemetry.savePlayerData(event.getPlayer(), false); // update user.
     }
 
     @EventHandler

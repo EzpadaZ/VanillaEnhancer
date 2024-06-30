@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 
 public class GeneralUtils {
@@ -163,6 +164,28 @@ public class GeneralUtils {
         } catch (ParseException e) {
             e.printStackTrace(); // Handle the exception according to your needs
             return null;
+        }
+    }
+
+    public static String toISOString(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return sdf.format(date);
+    }
+
+    public static double ISODateDifferenceInMinutes(String startTime, String endTime){
+        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        try {
+            Date startDate = isoFormat.parse(startTime);
+            Date endDate = isoFormat.parse(endTime);
+
+            long duration = endDate.getTime() - startDate.getTime();
+            return TimeUnit.MILLISECONDS.toMinutes(duration);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
         }
     }
 }

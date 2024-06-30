@@ -26,7 +26,7 @@ public class ConfigurationModel {
     // gameplay enhancements
     private boolean infinity = true;
     private boolean cb_fix = true;
-
+    private double tnt_explosion_radius = 8.0f;
     private boolean cart_enabled = true;
     private double cart_speed = 2.5;
 
@@ -120,6 +120,10 @@ public class ConfigurationModel {
         return cart_speed;
     }
 
+    public double getTnt_explosion_radius() {
+        return tnt_explosion_radius;
+    }
+
 
     public ConfigurationModel() {
         // this loads defaults.
@@ -141,6 +145,7 @@ public class ConfigurationModel {
             boolean cb_fix,
             boolean cart_enabled,
             double cart_speed,
+            double tnt_explosion_radius,
             boolean watcher_enabled,
             int watcher_interval,
             double warning_tps,
@@ -163,6 +168,7 @@ public class ConfigurationModel {
         this.cb_fix = cb_fix;
         this.cart_enabled = cart_enabled;
         this.cart_speed = cart_speed;
+        this.tnt_explosion_radius = tnt_explosion_radius;
         this.watcher_enabled = watcher_enabled;
         this.watcher_interval = watcher_interval;
         this.warning_tps = warning_tps;
@@ -198,6 +204,7 @@ public class ConfigurationModel {
                 cb_fix = enhancements.getBoolean("cb_fix", true),
                 cart_enabled = enhancements.getBoolean("cart_enabled", true),
                 cart_speed = getDoubleOrDefault(enhancements, "cart_speed", 2.0),
+                tnt_explosion_radius = getDoubleOrDefault(enhancements, "tnt_explosion_radius", 8.0),
                 watcher_enabled = watcher.getBoolean("enabled", true),
                 watcher_interval = watcher.getInteger("interval", 30),
                 warning_tps = getDoubleOrDefault(watcher, "warning_tps", 18.0),
@@ -256,6 +263,7 @@ public class ConfigurationModel {
         enhancements.append("cart_enabled", getCart_enabled());
         enhancements.append("cart_speed", getCart_speed());
         enhancements.append("auto_food", getAutofood_enabled());
+        enhancements.append("tnt_explosion_radius", getTnt_explosion_radius());
         return enhancements;
     }
 

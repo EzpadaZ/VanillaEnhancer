@@ -1,16 +1,19 @@
 package dev.ezpadaz.vanillaenhancer.Utils;
 
 import dev.ezpadaz.vanillaenhancer.Utils.Database.Model.Config.ConfigurationModel;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.ChiseledBookshelf;
-import org.bukkit.block.data.type.RedstoneRail;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
@@ -75,6 +78,24 @@ public class GameplayEnhancer {
                         cart.setMaxSpeed(MAX_METERS_PER_TICK);
                     }
                 }
+            }
+        }
+    }
+
+    public static void customTntExplosion(EntityExplodeEvent event) {
+        if (event.getEntity().getType() == EntityType.TNT) {
+            ConfigurationModel settings = SettingsHelper.getInstance().getSettings();
+            // Cancel the default explosion
+            event.setCancelled(true);
+
+            // Get the location of the original explosion
+            Location explosionLocation = event.getLocation();
+
+            // Create a new explosion with a larger radius
+            World world = explosionLocation.getWorld();
+            if (world != null) {
+                // Double the explosion size (the second parameter is the explosion power)
+                world.createExplosion(explosionLocation, (float) settings.getTnt_explosion_radius()); // Default TNT explosion power is 4.0f
             }
         }
     }

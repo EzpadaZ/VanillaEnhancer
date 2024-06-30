@@ -3,18 +3,24 @@ package dev.ezpadaz.vanillaenhancer.Listeners.Entity;
 import dev.ezpadaz.vanillaenhancer.Utils.GameplayEnhancer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
 
 public class EntityListener implements Listener {
 
     @EventHandler
-    public void onCartMove(VehicleMoveEvent event){
+    public void onCartMove(VehicleMoveEvent event) {
         GameplayEnhancer.cartSpeedIncrease(event);
     }
 
     @EventHandler
-    public void onBowShoot(EntityShootBowEvent event){
+    public void onBowShoot(EntityShootBowEvent event) {
         GameplayEnhancer.infiniteArrowEnchantment(event);
+    }
+
+    @EventHandler
+    public void onEntityExplode(EntityExplodeEvent event) {
+        GameplayEnhancer.customTntExplosion(event);
     }
 }

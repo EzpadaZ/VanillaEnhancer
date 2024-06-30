@@ -1,9 +1,13 @@
 package dev.ezpadaz.vanillaenhancer.Utils.Database.Model.Generic;
 
 import com.google.gson.annotations.SerializedName;
+import dev.ezpadaz.vanillaenhancer.Utils.Database.Model.Config.ConfigurationModel;
 import dev.ezpadaz.vanillaenhancer.Utils.GeneralUtils;
+import dev.ezpadaz.vanillaenhancer.VanillaEnhancer;
 import org.bson.Document;
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
+import org.bukkit.World;
 
 import java.util.Date;
 
@@ -49,11 +53,13 @@ public class TPSEventModel {
     }
 
     public TPSEventModel(double recordedTPS, boolean panic) {
+        World world = VanillaEnhancer.getInstance().getServer().getWorlds().get(0);
+
         this.id = GeneralUtils.generateUUID();
         this.cdate = GeneralUtils.getISODate();
         this.didPanic = panic;
         this.playersOnline = Bukkit.getOnlinePlayers().size();
-        this.chunksLoaded = (Bukkit.getWorld("fauno") != null) ? Bukkit.getWorld("fauno").getLoadedChunks().length : 0;
+        this.chunksLoaded = world.getLoadedChunks().length;
         this.eventTPS = recordedTPS;
     }
 
